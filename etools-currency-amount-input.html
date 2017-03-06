@@ -1,0 +1,292 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-input/paper-input.html">
+
+<!--
+`etools-currency-input`
+
+
+@demo demo/index.html 
+-->
+
+<dom-module id="etools-currency-amount-input">
+
+  <template>
+    <style>
+      *[hidden] {
+        display: none !important;
+      }
+
+      :host {
+        width: 235px;
+        @apply(--etools-currency-input);
+      }
+
+    </style>
+
+    <paper-input id="currencyInput"
+                 label="[[label]]"
+                 value="{{internalValue}}"
+                 allowed-pattern="[0-9\.\,\ ]"
+                 placeholder="[[placeholder]]"
+                 disabled$="[[disabled]]"
+                 readonly$="[[readonly]]"
+                 required$="[[required]]"
+                 invalid$="[[invalid]]"
+                 auto-validate$="[[autoValidate]]"
+                 error-message="[[errorMessage]]">
+      <div prefix class="prefix" hidden$=[[!currency]]>[[currency]]</div>
+    </paper-input>
+  </template>
+
+  <script>
+    (function() {
+      'use strict';
+
+      Polymer({
+
+        is: 'etools-currency-amount-input',
+        properties: {
+          label: String,
+          internalValue: {
+            type: String,
+            notify: true,
+            observer: '_onInternalValueChange'
+          },
+          value: {
+            type: String,
+            notify: true,
+//            observer: '_onValueChange'
+          },
+          placeholder: {
+            type: String,
+            value: '—'
+          },
+          readonly: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute: true,
+            observer: '_onReadonlyStateChange'
+          },
+          disabled: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute: true,
+          },
+          required: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute: true
+          },
+          autoValidate: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute: true
+          },
+          invalid: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute: true
+          },
+          errorMessage: {
+            type: String,
+            value: 'This field is required'
+          },
+          currency: String
+        },
+
+        _onReadonlyStateChange: function(newValue, oldValue) {
+          if (newValue !== oldValue) {
+            this.updateStyles();
+          }
+        },
+
+        validate: function() {
+          return this.$.currencyInput.validate();
+        },
+
+        _onInternalValueChange: function(value, oldValue) {
+          console.log('value changed: ', value, oldValue);
+          if (typeof value === 'undefined') {
+            return;
+          }
+
+          // get internal iron-input and ensure internalValue is string
+          var ironInput = Polymer.dom(this.$.currencyInput.root).querySelector('#input');
+          value = value ? value.toString() : '';
+          oldValue = oldValue ? oldValue.toString() : '';
+          // get cursor current position and set exinsting currency amount delimiters
+          var currentCursorPossition = ironInput.selectionStart;
+
+          if (this._getValueWithoutFormat(value) === this._getValueWithoutFormat(oldValue)) {
+            if (value.length && value.split('  ').length === 0) {
+              return;
+            }
+            // remove unnecessary spaces, if any
+            var cleanedValue = this._getValueWithoutUnneededSpaces(value);
+            if (!cleanedValue || !cleanedValue.needsUpdate) {
+              return;
+            }
+            console.log('remove spaces =========', value);
+            this._updateElementInternalValue(cleanedValue.value,
+                ironInput, currentCursorPossition - 1);
+            return;
+          }
+          console.log('current cursor pos: ', currentCursorPossition);
+          var initialDelimitersNrUntilCursor = this._getCurrencyAmountDelimitersNumber(value, currentCursorPossition);
+          // get updated cursor position without delimites
+          //currentCursorPossition = currentCursorPossition - (initialDelimitersNrUntilCursor * 2);
+          //console.log('current cursor without delimiters: ', currentCursorPossition);
+
+          // remove format
+          value = this._getValueWithoutFormat(value);
+
+          // re-apply format
+          var value = this._applyCurrencyAmountFormat(value);
+          value = value.trim();
+
+          // update cursor position
+          var updatedCursorPossition = this._updateCursorPosition(currentCursorPossition,
+              initialDelimitersNrUntilCursor, value);
+          console.log('updated cursor pos: ', updatedCursorPossition);
+
+          this._updateElementInternalValue(value, ironInput, updatedCursorPossition);
+          console.log(value);
+        },
+
+        _updateElementInternalValue: function(value, ironInput, cursorPos) {
+          this.$.currencyInput.updateValueAndPreserveCaret(value);
+          ironInput.selectionStart = ironInput.selectionEnd = cursorPos;
+        },
+
+        _getValueWithoutUnneededSpaces: function(value) {
+          if (value === '') {
+            return false;
+          }
+          var _values = value.split(', ');
+          var _newValues = [];
+          var _hasUnneddedSpaces = false;
+          if (_values.length) {
+            _values.forEach(function(val) {
+              if (val.indexOf(' ') > -1) {
+                _hasUnneddedSpaces = true;
+              }
+              val = val.split(' ').join('');
+              if (val !== '') {
+                _newValues.push(val);
+              }
+            });
+          }
+          return {
+            value: _newValues.join(', '),
+            needsUpdate: _hasUnneddedSpaces
+          };
+        },
+
+        _updateCursorPosition: function(currentPosition, initialDelimitersNrUntilCursor, value) {
+          var totalDelimitersUntilCursorPosition = parseInt(currentPosition/3);
+
+
+
+
+
+          var _values = value.split(', ');
+          if (_values.length && _values[0].length === 3) {
+            totalDelimitersUntilCursorPosition--;
+          }
+          console.log(currentPosition, totalDelimitersUntilCursorPosition);
+          var charsAfterLastDelimiter = currentPosition % 3;
+//          console.log('chars: ', charsAfterLastDelimiter);
+//          if (charsAfterLastDelimiter !== 0) {
+//            //charsAfterLastDelimiter = 3 - charsAfterLastDelimiter;
+//          }
+          var updatedPosition = currentPosition + (totalDelimitersUntilCursorPosition * 2) + charsAfterLastDelimiter;
+          if (updatedPosition < 0) {
+            updatedPosition = 0;
+          }
+          return updatedPosition;
+        },
+
+        _getCurrencyAmountDelimitersNumber: function(currencyAmount, positionLimit) {
+          if (positionLimit) {
+            currencyAmount = currencyAmount.substr(0, positionLimit);
+          }
+          return currencyAmount.split(', ').length - 1;
+        },
+
+        _applyCurrencyAmountFormat: function(value) {
+          value = value ? value.toString() : '';
+          var formattedValue = '';
+          var _valueParts = value.split('.');
+          /**
+           * _valueParts[0] - integer part
+           * _valueParts[1] - decimals, if any
+           */
+          if (_valueParts[0] !== '') {
+            var formattedValue = this._addCurrencyAmountDelimiter(_valueParts[0]);
+            var decimalsPart = _valueParts[1];
+
+            if (!this._emptyValue(decimalsPart)) {
+              formattedValue += '.' + decimalsPart;
+            }
+          }
+          return formattedValue;
+        },
+
+        _getValueWithoutFormat: function(value) {
+          value = value ? value.toString() : '';
+          var _values = value.split('.');
+          var _decimals = '';
+          var _hasTooManyFloatingPoints = _values.length;
+          if (_hasTooManyFloatingPoints > 1) {
+            _decimals = _values[_values.length - 1];
+            _values = _values.slice(0, _values.length - 1);
+          }
+          value = _values.join('');
+          if (_decimals !== '') {
+            value += '.' + _decimals;
+          }
+          return value.split(',').join('').split(' ').join('');
+        },
+
+        _emptyValue: function(value) {
+          if (value === null || typeof value === 'undefined') {
+            return true;
+          }
+          value = value.toString();
+          if (value === '') {
+            return true;
+          }
+          return false;
+        },
+
+        _addCurrencyAmountDelimiter: function(value) {
+          if (this._emptyValue(value)) {
+            return '';
+          }
+          return value.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1, ');
+        },
+
+        _getRealNumberValue: function(value, decimals) {
+          if (!decimals) {
+            decimals = false;
+          }
+          if (this._emptyValue(value)) {
+            return null;
+          }
+          value = this._getValueWithoutFormat(value);
+          var floatVal = parseFloat(value);
+          if (isNaN(floatVal)) {
+            return null;
+          }
+          if (decimals) {
+            return floatVal.toFixed(decimals);
+          }
+          return floatVal;
+        }
+
+      });
+    })();
+  </script>
+
+</dom-module>
+
