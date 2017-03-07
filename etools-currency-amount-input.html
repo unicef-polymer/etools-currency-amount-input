@@ -17,7 +17,8 @@
       }
 
       :host {
-        width: 235px;
+        display: block;
+        width: 100%;
         @apply(--etools-currency-input);
       }
 
@@ -25,13 +26,15 @@
 
     <paper-input id="currencyInput"
                  label="[[label]]"
-                 value="{{internalValue}}"
+                 value="{{_internalValue}}"
                  allowed-pattern="[0-9\.\,\ ]"
                  placeholder="[[placeholder]]"
                  disabled$="[[disabled]]"
+                 on-keydown="_onKeyDown"
+                 on-blur="_onBlur"
                  readonly$="[[readonly]]"
                  required$="[[required]]"
-                 invalid$="[[invalid]]"
+                 invalid$="{{invalid}}"
                  auto-validate$="[[autoValidate]]"
                  error-message="[[errorMessage]]">
       <div prefix class="prefix" hidden$=[[!currency]]>[[currency]]</div>
@@ -47,7 +50,7 @@
         is: 'etools-currency-amount-input',
         properties: {
           label: String,
-          internalValue: {
+          _internalValue: {
             type: String,
             notify: true,
             observer: '_onInternalValueChange'
@@ -55,7 +58,7 @@
           value: {
             type: String,
             notify: true,
-//            observer: '_onValueChange'
+            observer: '_onValueChange'
           },
           placeholder: {
             type: String,
@@ -64,8 +67,7 @@
           readonly: {
             type: Boolean,
             value: false,
-            reflectToAttribute: true,
-            observer: '_onReadonlyStateChange'
+            reflectToAttribute: true
           },
           disabled: {
             type: Boolean,
@@ -91,71 +93,165 @@
             type: String,
             value: 'This field is required'
           },
-          currency: String
+          currency: String,
+          _currentKeyPressed: String,
+          _limit: {
+            type: Number,
+            value: 999999999999
+          }
         },
 
-        _onReadonlyStateChange: function(newValue, oldValue) {
-          if (newValue !== oldValue) {
-            this.updateStyles();
-          }
+        observers: ['_updateStyles(readonly, disabled, invalid)'],
+
+//        ready: function() {
+//          var ironInput = Polymer.dom(this.$.currencyInput.root).querySelector('#input');
+//          ironInput.size = 13;
+//        },
+
+        _updateStyles: function() {
+          this.updateStyles();
         },
 
         validate: function() {
           return this.$.currencyInput.validate();
         },
 
+        _onValueChange: function(value) {
+          if (value) {
+            var currentValue = value.toString();
+            currentValue = parseFloat(this._getValueWithoutFormat(currentValue, 2));
+
+            var internalVal = parseFloat(this._getValueWithoutFormat(this._internalValue, 2));
+            if (currentValue !== internalVal) {
+              console.log('======== set value ============', currentValue);
+              this.set('_internalValue', currentValue);
+            }
+          }
+        },
+
+        _restoreDamagedInternalValue: function(value, ironInput, currentCursorPossition) {
+          // search unnedded spaces or restore delimiter space in case it was deleted
+          var valWithoutDelimiters = value.split(', ').join('');
+          var commaSplitLength = valWithoutDelimiters.split(',').length;
+          var spaceSplitLength = valWithoutDelimiters.split(' ').length;
+
+          if (spaceSplitLength === 1 && commaSplitLength === 1) {
+            // no unneedded spaces or damaged delimiters found; do nothing
+            return;
+          }
+
+          // remove unnecessary spaces and fix delimiters, if any
+          var cleanedValue = this._getValueWithoutUnneededSpaces(value);
+          if (!cleanedValue) {
+            return;
+          }
+          if (!cleanedValue.needsUpdate && commaSplitLength === 1) {
+            return;
+          }
+          console.log('remove spaces =========', value);
+          if (commaSplitLength > 1) {
+            if (this._currentKeyPressed === 'delete') {
+              // delete was used to delete a delimiter space, jump to the next number
+              currentCursorPossition++;
+            } else {
+              // delimiter space deleted(backspace), jump to previous number position
+              currentCursorPossition--;
+            }
+          }
+          if (spaceSplitLength > 1 && this._currentKeyPressed === 'delete') {
+            // delete was used to delete a delimiter comma, jump to the next number
+            currentCursorPossition += 2;
+          }
+          // restore value and update cursor position
+          this._updateElementInternalValue(cleanedValue.value, ironInput, currentCursorPossition);
+        },
+
         _onInternalValueChange: function(value, oldValue) {
-          console.log('value changed: ', value, oldValue);
+          console.log('value changed: ', value, '===',oldValue);
           if (typeof value === 'undefined') {
             return;
           }
 
-          // get internal iron-input and ensure internalValue is string
+          // get internal iron-input and ensure _internalValue is string
           var ironInput = Polymer.dom(this.$.currencyInput.root).querySelector('#input');
           value = value ? value.toString() : '';
           oldValue = oldValue ? oldValue.toString() : '';
-          // get cursor current position and set exinsting currency amount delimiters
+
+          // get cursor current position
           var currentCursorPossition = ironInput.selectionStart;
 
-          if (this._getValueWithoutFormat(value) === this._getValueWithoutFormat(oldValue)) {
-            if (value.length && value.split('  ').length === 0) {
-              return;
-            }
-            // remove unnecessary spaces, if any
-            var cleanedValue = this._getValueWithoutUnneededSpaces(value);
-            if (!cleanedValue || !cleanedValue.needsUpdate) {
-              return;
-            }
-            console.log('remove spaces =========', value);
-            this._updateElementInternalValue(cleanedValue.value,
-                ironInput, currentCursorPossition - 1);
+          // floating point/period cand be added just one and only at the end of the string
+          var floatingPointPos = value.indexOf('.');
+          if (floatingPointPos > -1 && floatingPointPos < value.length - (oldValue.indexOf('.') > -1 ? 4 : 3)) {
+            // floating point can be added only at the end of the string, starting with the last 2 digits
+            this._updateElementInternalValue(value.replace('.', ''), ironInput, currentCursorPossition - 1);
             return;
           }
-          console.log('current cursor pos: ', currentCursorPossition);
-          var initialDelimitersNrUntilCursor = this._getCurrencyAmountDelimitersNumber(value, currentCursorPossition);
-          // get updated cursor position without delimites
-          //currentCursorPossition = currentCursorPossition - (initialDelimitersNrUntilCursor * 2);
-          //console.log('current cursor without delimiters: ', currentCursorPossition);
+
+          if (this._getValueWithoutFormat(value) === this._getValueWithoutFormat(oldValue)) {
+            // restore damaged internal value
+            this._restoreDamagedInternalValue(value, ironInput, currentCursorPossition);
+            return;
+          }
+
+          var charsAfterCursor = value.substr(currentCursorPossition).length;
+          console.log('current cursor pos: ', currentCursorPossition, charsAfterCursor);
 
           // remove format
-          value = this._getValueWithoutFormat(value);
-
-          // re-apply format
-          var value = this._applyCurrencyAmountFormat(value);
-          value = value.trim();
+          value = this._formatValue(value);
 
           // update cursor position
-          var updatedCursorPossition = this._updateCursorPosition(currentCursorPossition,
-              initialDelimitersNrUntilCursor, value);
+          var updatedCursorPossition = value.length - charsAfterCursor;
+          floatingPointPos = value.indexOf('.');
+          if (floatingPointPos > -1) {
+            // check cursor pos relative to floating point, only if floating point is not new
+            var newFloatingPoint = oldValue.indexOf('.') === -1;
+            if (updatedCursorPossition >= floatingPointPos + 1 && !newFloatingPoint) {
+              updatedCursorPossition++;
+            }
+          }
+          updatedCursorPossition = (updatedCursorPossition < 0) ? 0 : updatedCursorPossition;
           console.log('updated cursor pos: ', updatedCursorPossition);
 
           this._updateElementInternalValue(value, ironInput, updatedCursorPossition);
+          this._setExternalValue(value, oldValue);
           console.log(value);
+        },
+
+        _setExternalValue: function(value, oldValue) {
+          var realFloatValue = parseFloat(this._getValueWithoutFormat(value, 2));
+          if (realFloatValue > this._limit) {
+            var bkValue = null;
+            if (oldValue) {
+              bkValue = parseFloat(this._getValueWithoutFormat(oldValue, 2));
+              if (isNaN(bkValue)) {
+                bkValue = null;
+              } else {
+                bkValue = parseFloat(bkValue.toFixed(2));
+              }
+            }
+            this.set('value', bkValue);
+            return;
+          }
+          if (isNaN(realFloatValue)) {
+            realFloatValue = null;
+          } else {
+            realFloatValue = parseFloat(realFloatValue.toFixed(2));
+          }
+          this.set('value', realFloatValue);
+        },
+
+        _formatValue: function(value) {
+          value = this._getValueWithoutFormat(value, 2);
+          // re-apply format
+          var value = this._applyCurrencyAmountFormat(value);
+          return value.trim();
         },
 
         _updateElementInternalValue: function(value, ironInput, cursorPos) {
           this.$.currencyInput.updateValueAndPreserveCaret(value);
           ironInput.selectionStart = ironInput.selectionEnd = cursorPos;
+          this.$.currencyInput._handleAutoValidate();
         },
 
         _getValueWithoutUnneededSpaces: function(value) {
@@ -177,40 +273,9 @@
             });
           }
           return {
-            value: _newValues.join(', '),
+            value: this._formatValue(_newValues.join(', ')),
             needsUpdate: _hasUnneddedSpaces
           };
-        },
-
-        _updateCursorPosition: function(currentPosition, initialDelimitersNrUntilCursor, value) {
-          var totalDelimitersUntilCursorPosition = parseInt(currentPosition/3);
-
-
-
-
-
-          var _values = value.split(', ');
-          if (_values.length && _values[0].length === 3) {
-            totalDelimitersUntilCursorPosition--;
-          }
-          console.log(currentPosition, totalDelimitersUntilCursorPosition);
-          var charsAfterLastDelimiter = currentPosition % 3;
-//          console.log('chars: ', charsAfterLastDelimiter);
-//          if (charsAfterLastDelimiter !== 0) {
-//            //charsAfterLastDelimiter = 3 - charsAfterLastDelimiter;
-//          }
-          var updatedPosition = currentPosition + (totalDelimitersUntilCursorPosition * 2) + charsAfterLastDelimiter;
-          if (updatedPosition < 0) {
-            updatedPosition = 0;
-          }
-          return updatedPosition;
-        },
-
-        _getCurrencyAmountDelimitersNumber: function(currencyAmount, positionLimit) {
-          if (positionLimit) {
-            currencyAmount = currencyAmount.substr(0, positionLimit);
-          }
-          return currencyAmount.split(', ').length - 1;
         },
 
         _applyCurrencyAmountFormat: function(value) {
@@ -232,17 +297,23 @@
           return formattedValue;
         },
 
-        _getValueWithoutFormat: function(value) {
+        _getValueWithoutFormat: function(value, decimalsNr) {
+          if (!decimalsNr) {
+            decimalsNr = 0;
+          }
           value = value ? value.toString() : '';
           var _values = value.split('.');
           var _decimals = '';
-          var _hasTooManyFloatingPoints = _values.length;
-          if (_hasTooManyFloatingPoints > 1) {
+          var _floatingPoints = _values.length - 1;
+          if (_floatingPoints === 1) {
             _decimals = _values[_values.length - 1];
             _values = _values.slice(0, _values.length - 1);
           }
           value = _values.join('');
           if (_decimals !== '') {
+            if (decimalsNr > 0) {
+              _decimals = _decimals.slice(0, decimalsNr);
+            }
             value += '.' + _decimals;
           }
           return value.split(',').join('').split(' ').join('');
@@ -273,7 +344,7 @@
           if (this._emptyValue(value)) {
             return null;
           }
-          value = this._getValueWithoutFormat(value);
+          value = this._getValueWithoutFormat(value, 2);
           var floatVal = parseFloat(value);
           if (isNaN(floatVal)) {
             return null;
@@ -282,6 +353,35 @@
             return floatVal.toFixed(decimals);
           }
           return floatVal;
+        },
+
+        _onKeyDown: function(e) {
+          e.stopImmediatePropagation();
+          var currentKey = null;
+          if (e.which === 46) {
+            currentKey = 'delete';
+          }
+          if (e.which === 190) {
+            // do not allow more then one period char ('.')
+            var currentInternalValue = this._internalValue ? this._internalValue.toString() : '';
+            var floatingPtsNr = currentInternalValue.split('.').length - 1;
+            if (floatingPtsNr === 1) {
+              // stop, we already have a period
+              e.preventDefault();
+            }
+          }
+          this.set('_currentKeyPressed', currentKey);
+        },
+
+        _onBlur: function(e) {
+          if (this._internalValue) {
+            if (this._internalValue.substr(-1) === '.') {
+              this.set('_internalValue', this._internalValue + '00');
+            }
+            if (this._internalValue.indexOf('.') === -1) {
+              this.set('_internalValue', this._internalValue + '.00');
+            }
+          }
         }
 
       });

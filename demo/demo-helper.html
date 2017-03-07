@@ -2,11 +2,6 @@
 <link rel="import" href="../etools-currency-amount-input.html">
 
 <dom-module id="demo-helper">
-  <template>
-    
-    <etools-currency-amount-input label="Currency Input" value="{{inputValue}}"></etools-currency-amount-input>
-
-  </template>
   <script>
     (function() {
       // jscs:disable
@@ -18,12 +13,13 @@
         properties: {
           inputValue: {
             type: String,
-            value: ''
+            value: '',
+            notify: true
           }
         },
 
         ready: function() {
-          
+          this.set('inputValue', 234444.7856);
         }
         
       });
