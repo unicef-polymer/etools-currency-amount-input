@@ -8,10 +8,13 @@
      * Format value as currency amount. Delimited used ', '
      */
     addCurrencyAmountDelimiter: function(value) {
-      if (this._emptyValue(value)) {
+      if (!value) {
         return '';
       }
       value = value.toString();
+      if (value === '') {
+        return '';
+      }
       return value.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1, ');
     },
 
