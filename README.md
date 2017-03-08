@@ -1,4 +1,4 @@
-# \<etools-currency-input\>
+# \<etools-currency-amount-input\>
 
 A paper-input element that allows only currency amount values. It accepts only digits, comma, a
 a single floating point (period), and allows 2 decimals. The maximum number you can enter is 999999999999.99.
