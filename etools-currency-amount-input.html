@@ -1,15 +1,42 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../paper-input/paper-input.html">
 
+<link rel="import" href="./etools-currency-behavior.html">
+
 <!--
 `etools-currency-input`
 
+A paper-input element that allows only currency amount values. It accepts only digits, comma, a
+a single floating point (period), and allows 2 decimals. The maximum number you can enter is 999999999999.99.
+The value displayed it's paper-input's internal value. The `value` property of this element will update and format
+the internal value and when internal value is changed, element's value will be updated with current float value.
+
+### Usage
+```html
+<etools-currency-amount-input label="Amount value"
+    value="{{value}}" currency="$"></etools-currency-amount-input>
+```
+
+### Style
+
+Use this css mixins to style this element.
+All mixins are used to override the same mixin of paper-input.
+
+Custom property | Description | Default
+----------------|-------------|----------
+`--etools-currency-input` | Mixin applied to currency element | `{}`
+`--etools-currency-container-input` | Mixin applied to paper-input container input | `{}`
+`--etools-currency-container-label` | Mixin applied to paper-input label | `{}`
+`--etools-currency-container-label-focus` | Mixin applied to paper-input label when it's focused | `{}`
+`--etools-currency-container-label-floating` | Mixin applied to paper-input label when it floats | `{}`
+`--etools-currency-container-underline` | Mixin applied to the paper-input underline | `{}`
+`--etools-currency-container-underline-focus` | Mixin applied to the paper-input underline when it's focused | `{}`
+`--etools-currency-container-underline-disabled` | Mixin applied to the paper-input underline when it's disabled | `{}`
 
 @demo demo/index.html 
 -->
 
 <dom-module id="etools-currency-amount-input">
-
   <template>
     <style>
       *[hidden] {
@@ -20,6 +47,34 @@
         display: block;
         width: 100%;
         @apply(--etools-currency-input);
+
+        --paper-input-prefix: {
+          margin-right: 5px;
+        };
+      }
+
+      paper-input {
+        --paper-input-container-input: {
+          @apply(--etools-currency-container-input);
+        };
+        --paper-input-container-label: {
+          @apply(--etools-currency-container-label);
+        };
+        --paper-input-container-label-focus: {
+          @apply(--etools-currency-container-label-focus);
+        };
+        --paper-input-container-label-floating: {
+          @apply(--etools-currency-container-label-floating);
+        };
+        --paper-input-container-underline: {
+          @apply(--etools-currency-container-underline);
+        };
+        --paper-input-container-underline-focus: {
+          @apply(--etools-currency-container-underline-focus);
+        };
+        --paper-input-container-underline-disabled: {
+          @apply(--etools-currency-container-underline-disabled);
+        }
       }
 
     </style>
@@ -44,10 +99,9 @@
   <script>
     (function() {
       'use strict';
-
       Polymer({
-
         is: 'etools-currency-amount-input',
+        behaviors: [etoolsBehaviors.EtoolsCurrencyBehavior],
         properties: {
           label: String,
           _internalValue: {
@@ -97,16 +151,11 @@
           _currentKeyPressed: String,
           _limit: {
             type: Number,
-            value: 999999999999
+            value: 999999999999.99
           }
         },
 
         observers: ['_updateStyles(readonly, disabled, invalid)'],
-
-//        ready: function() {
-//          var ironInput = Polymer.dom(this.$.currencyInput.root).querySelector('#input');
-//          ironInput.size = 13;
-//        },
 
         _updateStyles: function() {
           this.updateStyles();
@@ -123,7 +172,6 @@
 
             var internalVal = parseFloat(this._getValueWithoutFormat(this._internalValue, 2));
             if (currentValue !== internalVal) {
-              console.log('======== set value ============', currentValue);
               this.set('_internalValue', currentValue);
             }
           }
@@ -148,7 +196,7 @@
           if (!cleanedValue.needsUpdate && commaSplitLength === 1) {
             return;
           }
-          console.log('remove spaces =========', value);
+
           if (commaSplitLength > 1) {
             if (this._currentKeyPressed === 'delete') {
               // delete was used to delete a delimiter space, jump to the next number
@@ -167,7 +215,6 @@
         },
 
         _onInternalValueChange: function(value, oldValue) {
-          console.log('value changed: ', value, '===',oldValue);
           if (typeof value === 'undefined') {
             return;
           }
@@ -195,7 +242,6 @@
           }
 
           var charsAfterCursor = value.substr(currentCursorPossition).length;
-          console.log('current cursor pos: ', currentCursorPossition, charsAfterCursor);
 
           // remove format
           value = this._formatValue(value);
@@ -211,32 +257,22 @@
             }
           }
           updatedCursorPossition = (updatedCursorPossition < 0) ? 0 : updatedCursorPossition;
-          console.log('updated cursor pos: ', updatedCursorPossition);
 
           this._updateElementInternalValue(value, ironInput, updatedCursorPossition);
           this._setExternalValue(value, oldValue);
-          console.log(value);
         },
 
-        _setExternalValue: function(value, oldValue) {
-          var realFloatValue = parseFloat(this._getValueWithoutFormat(value, 2));
+        /**
+         * Update element value with the float value of _internalValue
+         */
+        _setExternalValue: function(value) {
+          var realFloatValue = this._getRealNumberValue(this._getValueWithoutFormat(value, 2));
           if (realFloatValue > this._limit) {
-            var bkValue = null;
-            if (oldValue) {
-              bkValue = parseFloat(this._getValueWithoutFormat(oldValue, 2));
-              if (isNaN(bkValue)) {
-                bkValue = null;
-              } else {
-                bkValue = parseFloat(bkValue.toFixed(2));
-              }
-            }
-            this.set('value', bkValue);
+            this.set('value', this._limit);
+            this.set('_internalValue', this.addCurrencyAmountDelimiter(this._limit));
+            console.warn('[etools-currency-amount-input] Your value ' + realFloatValue +
+                ' exceedes the limit ' + this._limit + ' of this input');
             return;
-          }
-          if (isNaN(realFloatValue)) {
-            realFloatValue = null;
-          } else {
-            realFloatValue = parseFloat(realFloatValue.toFixed(2));
           }
           this.set('value', realFloatValue);
         },
@@ -287,7 +323,7 @@
            * _valueParts[1] - decimals, if any
            */
           if (_valueParts[0] !== '') {
-            var formattedValue = this._addCurrencyAmountDelimiter(_valueParts[0]);
+            var formattedValue = this.addCurrencyAmountDelimiter(_valueParts[0]);
             var decimalsPart = _valueParts[1];
 
             if (!this._emptyValue(decimalsPart)) {
@@ -330,13 +366,6 @@
           return false;
         },
 
-        _addCurrencyAmountDelimiter: function(value) {
-          if (this._emptyValue(value)) {
-            return '';
-          }
-          return value.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1, ');
-        },
-
         _getRealNumberValue: function(value, decimals) {
           if (!decimals) {
             decimals = false;
@@ -350,7 +379,7 @@
             return null;
           }
           if (decimals) {
-            return floatVal.toFixed(decimals);
+            return parseFloat(floatVal.toFixed(decimals));
           }
           return floatVal;
         },
@@ -375,11 +404,18 @@
 
         _onBlur: function(e) {
           if (this._internalValue) {
+            // adjust decimals on focus lost
             if (this._internalValue.substr(-1) === '.') {
               this.set('_internalValue', this._internalValue + '00');
             }
-            if (this._internalValue.indexOf('.') === -1) {
+            var _floatingPointPos = this._internalValue.indexOf('.');
+            if (_floatingPointPos === -1) {
               this.set('_internalValue', this._internalValue + '.00');
+            } else {
+              if (this._internalValue.slice(_floatingPointPos + 1).length == 1) {
+                // add second missing decimal
+                this.set('_internalValue', this._internalValue + '0');
+              }
             }
           }
         }
@@ -387,6 +423,5 @@
       });
     })();
   </script>
-
 </dom-module>
 

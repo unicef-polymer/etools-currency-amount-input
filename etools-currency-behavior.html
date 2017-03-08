@@ -1,0 +1,33 @@
+<link rel="import" href="../polymer/polymer.html">
+<script>
+  /** @polymerBehavior etoolsBehaviors.EtoolsCurrencyBehavior */
+  window.etoolsBehaviors = window.EtoolsCurrencyBehavior || {};
+  etoolsBehaviors.EtoolsCurrencyBehavior = {
+
+    /**
+     * Format value as currency amount. Delimited used ', '
+     */
+    addCurrencyAmountDelimiter: function(value) {
+      if (this._emptyValue(value)) {
+        return '';
+      }
+      value = value.toString();
+      return value.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1, ');
+    },
+
+    /**
+     * Format value as currency amount and return it to be displayed
+     * Use this to display readonly currency amounts on interface
+     */
+    displayCurrencyAmount: function(value, placeholder) {
+      if (!placeholder) {
+        placeholder = '—';
+      }
+      if (!value) {
+        return placeholder;
+      }
+      return this.addCurrencyAmountDelimiter(value.toString());
+    }
+
+  };
+</script>

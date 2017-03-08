@@ -24,9 +24,10 @@
         <template is="dom-bind">
           <demo-helper input-value="{{value}}"></demo-helper>
 
-          <etools-currency-amount-input label="Currency amount example"></etools-currency-amount-input>
+          <etools-currency-amount-input label="Currency amount example"
+                                        currency="$"></etools-currency-amount-input>
           <etools-currency-amount-input label="Currency amount example with value provided"
-                                        value="{{value}}"></etools-currency-amount-input>
+                                        value="{{value}}" currency="$"></etools-currency-amount-input>
         </template>
       </demo-snippet>
     </div>
