@@ -1,7 +1,7 @@
 # \<etools-currency-amount-input\>
 
-A paper-input element that allows only currency amount values. It accepts only digits, comma, a
-a single floating point (period), and allows 2 decimals. The maximum number you can enter is 999999999999.99.
+A paper-input element that allows only currency amount values (US format). It accepts only digits, comma, a
+a single floating point (period), and allows 2 decimals. The maximum number you can have 12 digits until floating point.
 The value displayed it's paper-input's internal value. The `value` property of this element will update and format
 the internal value and when internal value is changed, element's value will be updated with current float value.
 
@@ -16,7 +16,7 @@ To only display values as currency amounts you can use `etoolsBehaviors.EtoolsCu
 * currency, string
 * disabled, Boolean, default: false
 * errorMessage, String, default: 'This field is required'
-* invalid, Boolean, default: false
+* invalid, Boolean, default: false - notifies
 * label, String
 * placeholder, String, default: '—'
 * readonly, Boolean, default: false
