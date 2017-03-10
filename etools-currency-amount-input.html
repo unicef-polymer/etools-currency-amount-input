@@ -6,8 +6,8 @@
 <!--
 `etools-currency-input`
 
-A paper-input element that allows only currency amount values. It accepts only digits, comma, a
-a single floating point (period), and allows 2 decimals. The maximum number you can enter is 999999999999.99.
+A paper-input element that allows only currency amount values (US format). It accepts only digits, comma, a
+a single floating point (period), and allows 2 decimals. The maximum number you can have 12 digits until floating point.
 The value displayed it's paper-input's internal value. The `value` property of this element will update and format
 the internal value and when internal value is changed, element's value will be updated with current float value.
 
@@ -82,7 +82,7 @@ Custom property | Description | Default
     <paper-input id="currencyInput"
                  label="[[label]]"
                  value="{{_internalValue}}"
-                 allowed-pattern="[0-9\.\,\ ]"
+                 allowed-pattern="[0-9\.\,]"
                  placeholder="[[placeholder]]"
                  disabled$="[[disabled]]"
                  on-keydown="_onKeyDown"
@@ -110,7 +110,7 @@ Custom property | Description | Default
             observer: '_onInternalValueChange'
           },
           value: {
-            type: String,
+            value: null,
             notify: true,
             observer: '_onValueChange'
           },
@@ -141,6 +141,7 @@ Custom property | Description | Default
           invalid: {
             type: Boolean,
             value: false,
+            notify: true,
             reflectToAttribute: true
           },
           errorMessage: {
@@ -149,9 +150,9 @@ Custom property | Description | Default
           },
           currency: String,
           _currentKeyPressed: String,
-          _limit: {
+          _charsLimit: {
             type: Number,
-            value: 999999999999.99
+            value: 12
           }
         },
 
@@ -178,42 +179,33 @@ Custom property | Description | Default
         },
 
         _restoreDamagedInternalValue: function(value, ironInput, currentCursorPossition) {
-          // search unnedded spaces or restore delimiter space in case it was deleted
-          var valWithoutDelimiters = value.split(', ').join('');
-          var commaSplitLength = valWithoutDelimiters.split(',').length;
-          var spaceSplitLength = valWithoutDelimiters.split(' ').length;
+          // search for wrong delimiters and repair value's format
+          var formattedValue = this._formatValue(value);
+          var currentValCurrencyDelimitersNr = value.split(',').length;
+          var formattedValCurrencyDelimitersNr = formattedValue.split(',').length;
 
-          if (spaceSplitLength === 1 && commaSplitLength === 1) {
-            // no unneedded spaces or damaged delimiters found; do nothing
+          if (currentValCurrencyDelimitersNr === formattedValCurrencyDelimitersNr) {
+            // no change
             return;
           }
 
-          // remove unnecessary spaces and fix delimiters, if any
-          var cleanedValue = this._getValueWithoutUnneededSpaces(value);
-          if (!cleanedValue) {
-            return;
-          }
-          if (!cleanedValue.needsUpdate && commaSplitLength === 1) {
-            return;
-          }
-
-          if (commaSplitLength > 1) {
+          if (currentValCurrencyDelimitersNr > formattedValCurrencyDelimitersNr) {
+            // wrong delimiters added, keep prev cursor position as wrong delimiters is deleted
+            currentCursorPossition--;
+          } else {
             if (this._currentKeyPressed === 'delete') {
-              // delete was used to delete a delimiter space, jump to the next number
+              // delete was used to delete a delimiter, jump to the next number
               currentCursorPossition++;
-            } else {
-              // delimiter space deleted(backspace), jump to previous number position
-              currentCursorPossition--;
             }
           }
-          if (spaceSplitLength > 1 && this._currentKeyPressed === 'delete') {
-            // delete was used to delete a delimiter comma, jump to the next number
-            currentCursorPossition += 2;
-          }
+
           // restore value and update cursor position
-          this._updateElementInternalValue(cleanedValue.value, ironInput, currentCursorPossition);
+          this._updateElementInternalValue(formattedValue, ironInput, currentCursorPossition);
         },
 
+        /**
+         * Internal value changed, needs to be checked and changed to US currency format
+         */
         _onInternalValueChange: function(value, oldValue) {
           if (typeof value === 'undefined') {
             return;
@@ -227,9 +219,9 @@ Custom property | Description | Default
           // get cursor current position
           var currentCursorPossition = ironInput.selectionStart;
 
-          // floating point/period cand be added just one and only at the end of the string
+          // floating point/period can be added just one and only at the end of the string
           var floatingPointPos = value.indexOf('.');
-          if (floatingPointPos > -1 && floatingPointPos < value.length - (oldValue.indexOf('.') > -1 ? 4 : 3)) {
+          if (floatingPointPos > -1 && (floatingPointPos + 1) < value.length - (oldValue.indexOf('.') > -1 ? 4 : 3)) {
             // floating point can be added only at the end of the string, starting with the last 2 digits
             this._updateElementInternalValue(value.replace('.', ''), ironInput, currentCursorPossition - 1);
             return;
@@ -241,14 +233,29 @@ Custom property | Description | Default
             return;
           }
 
+          var preserveFloatingPoint = false;
+          if (value.slice(-1) === '.') {
+            preserveFloatingPoint = true;
+          }
+
           var charsAfterCursor = value.substr(currentCursorPossition).length;
 
           // remove format
           value = this._formatValue(value);
+          if (preserveFloatingPoint) {
+            value = value + '.';
+          }
 
           // update cursor position
+          var updatedCursorPossition = this._getUpdatedCursorPosition(value, charsAfterCursor, oldValue);
+
+          this._updateElementInternalValue(value, ironInput, updatedCursorPossition);
+          this._setExternalValue(value, preserveFloatingPoint);
+        },
+
+        _getUpdatedCursorPosition: function(value, charsAfterCursor, oldValue) {
           var updatedCursorPossition = value.length - charsAfterCursor;
-          floatingPointPos = value.indexOf('.');
+          var floatingPointPos = value.indexOf('.');
           if (floatingPointPos > -1) {
             // check cursor pos relative to floating point, only if floating point is not new
             var newFloatingPoint = oldValue.indexOf('.') === -1;
@@ -257,24 +264,31 @@ Custom property | Description | Default
             }
           }
           updatedCursorPossition = (updatedCursorPossition < 0) ? 0 : updatedCursorPossition;
-
-          this._updateElementInternalValue(value, ironInput, updatedCursorPossition);
-          this._setExternalValue(value, oldValue);
+          return updatedCursorPossition;
         },
 
         /**
          * Update element value with the float value of _internalValue
          */
-        _setExternalValue: function(value) {
-          var realFloatValue = this._getRealNumberValue(this._getValueWithoutFormat(value, 2));
-          if (realFloatValue > this._limit) {
-            this.set('value', this._limit);
-            this.set('_internalValue', this.addCurrencyAmountDelimiter(this._limit));
-            console.warn('[etools-currency-amount-input] Your value ' + realFloatValue +
-                ' exceedes the limit ' + this._limit + ' of this input');
-            return;
+        _setExternalValue: function(value, preserveFloatingPoint) {
+          var cleanValStr = this._getValueWithoutFormat(value, 2);
+          var valuePieces = cleanValStr.split('.');
+          if (valuePieces[0].length > this._charsLimit) {
+            // limit number integer part to max 12 digits
+            valuePieces[0] = valuePieces[0].slice(0, this._charsLimit);
           }
-          this.set('value', realFloatValue);
+          cleanValStr = valuePieces.join('.');
+          if (preserveFloatingPoint) {
+            cleanValStr += '.';
+          }
+          var realFloatValue = this._getRealNumberValue(cleanValStr);
+          if (realFloatValue !== this.value) {
+            // update value only if needed
+            this.set('value', realFloatValue);
+          } else {
+            // update internal value
+            this.set('_internalValue', this.addCurrencyAmountDelimiter(cleanValStr));
+          }
         },
 
         _formatValue: function(value) {
@@ -288,30 +302,6 @@ Custom property | Description | Default
           this.$.currencyInput.updateValueAndPreserveCaret(value);
           ironInput.selectionStart = ironInput.selectionEnd = cursorPos;
           this.$.currencyInput._handleAutoValidate();
-        },
-
-        _getValueWithoutUnneededSpaces: function(value) {
-          if (value === '') {
-            return false;
-          }
-          var _values = value.split(', ');
-          var _newValues = [];
-          var _hasUnneddedSpaces = false;
-          if (_values.length) {
-            _values.forEach(function(val) {
-              if (val.indexOf(' ') > -1) {
-                _hasUnneddedSpaces = true;
-              }
-              val = val.split(' ').join('');
-              if (val !== '') {
-                _newValues.push(val);
-              }
-            });
-          }
-          return {
-            value: this._formatValue(_newValues.join(', ')),
-            needsUpdate: _hasUnneddedSpaces
-          };
         },
 
         _applyCurrencyAmountFormat: function(value) {
@@ -352,6 +342,7 @@ Custom property | Description | Default
             }
             value += '.' + _decimals;
           }
+          // remove commas and spaces and return value
           return value.split(',').join('').split(' ').join('');
         },
 
