@@ -167,14 +167,14 @@ Custom property | Description | Default
         },
 
         _onValueChange: function(value) {
-          if (value) {
-            var currentValue = value.toString();
-            currentValue = parseFloat(this._getValueWithoutFormat(currentValue, 2));
-
-            var internalVal = parseFloat(this._getValueWithoutFormat(this._internalValue, 2));
-            if (currentValue !== internalVal) {
-              this.set('_internalValue', currentValue);
-            }
+          var currentValue = value ? value.toString() : '';
+          currentValue = parseFloat(this._getValueWithoutFormat(currentValue, 2)).toFixed(2);
+          if (isNaN(currentValue)) {
+            currentValue = null;
+          }
+          var internalVal = parseFloat(this._getValueWithoutFormat(this._internalValue, 2)).toFixed(2);
+          if (currentValue !== internalVal) {
+            this.set('_internalValue', currentValue);
           }
         },
 
