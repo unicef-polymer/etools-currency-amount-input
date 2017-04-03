@@ -166,13 +166,31 @@ Custom property | Description | Default
           return this.$.currencyInput.validate();
         },
 
+        _getStrValue: function(value) {
+          try {
+            if (value === 0) {
+              return '0';
+            } else {
+              return value.toString();
+            }
+          } catch (error) {
+            return '0';
+          }
+        },
+
         _onValueChange: function(value) {
-          var currentValue = value ? value.toString() : '';
-          currentValue = parseFloat(this._getValueWithoutFormat(currentValue, 2)).toFixed(2);
+          if (value === null && this._internalValue === '') {
+            return;
+          }
+          var currentValue = value;
+          if (currentValue === null || typeof currentValue === 'undefined') {
+            this.set('_internalValue', null);
+          }
+          currentValue = parseFloat(this._getValueWithoutFormat(value, 2, true)).toFixed(2);
           if (isNaN(currentValue)) {
             currentValue = null;
           }
-          var internalVal = parseFloat(this._getValueWithoutFormat(this._internalValue, 2)).toFixed(2);
+          var internalVal = parseFloat(this._getValueWithoutFormat(this._internalValue, 2, true)).toFixed(2);
           if (currentValue !== internalVal) {
             this.set('_internalValue', currentValue);
           }
@@ -207,14 +225,24 @@ Custom property | Description | Default
          * Internal value changed, needs to be checked and changed to US currency format
          */
         _onInternalValueChange: function(value, oldValue) {
-          if (typeof value === 'undefined') {
+          if (typeof value === 'undefined' || value === null) {
             return;
           }
 
           // get internal iron-input and ensure _internalValue is string
           var ironInput = Polymer.dom(this.$.currencyInput.root).querySelector('#input');
-          value = value ? value.toString() : '';
-          oldValue = oldValue ? oldValue.toString() : '';
+          value = this._getStrValue(value);
+          oldValue = this._getStrValue(oldValue);
+
+          if (value.substr(0, 1) === '0' && value.substr(1, 1) !== '.' && value.length > 1) {
+            this._updateElementInternalValue(oldValue, ironInput, 0);
+            return;
+          }
+
+          if (value === '.') {
+            this.set('_internalValue', null);
+            return;
+          }
 
           // get cursor current position
           var currentCursorPossition = ironInput.selectionStart;
@@ -227,23 +255,28 @@ Custom property | Description | Default
             return;
           }
 
-          if (this._getValueWithoutFormat(value) === this._getValueWithoutFormat(oldValue)) {
-            // restore damaged internal value
-            this._restoreDamagedInternalValue(value, ironInput, currentCursorPossition);
-            return;
-          }
-
           var preserveFloatingPoint = false;
           if (value.slice(-1) === '.') {
             preserveFloatingPoint = true;
           }
 
+          if (this._getValueWithoutFormat(value) === this._getValueWithoutFormat(oldValue) && !preserveFloatingPoint) {
+            // restore damaged internal value
+            this._restoreDamagedInternalValue(value, ironInput, currentCursorPossition);
+            return;
+          }
+
           var charsAfterCursor = value.substr(currentCursorPossition).length;
 
-          // remove format
-          value = this._formatValue(value);
-          if (preserveFloatingPoint) {
-            value = value + '.';
+          if (value.substring(0, 1) === '.') {
+            // no integer value, only floating point and decimals
+            value = value.substring(0, 3);
+          } else {
+            // format new value
+            value = this._formatValue(value);
+            if (preserveFloatingPoint) {
+              value = value + '.';
+            }
           }
 
           // update cursor position
@@ -273,13 +306,19 @@ Custom property | Description | Default
         _setExternalValue: function(value, preserveFloatingPoint) {
           var cleanValStr = this._getValueWithoutFormat(value, 2);
           var valuePieces = cleanValStr.split('.');
+          var limitExceeded = false;
           if (valuePieces[0].length > this._charsLimit) {
             // limit number integer part to max 12 digits
             valuePieces[0] = valuePieces[0].slice(0, this._charsLimit);
+            limitExceeded = true;
           }
           cleanValStr = valuePieces.join('.');
           if (preserveFloatingPoint) {
             cleanValStr += '.';
+          }
+          if (limitExceeded) {
+            this.set('_internalValue', this.addCurrencyAmountDelimiter(cleanValStr));
+            return;
           }
           var realFloatValue = this._getRealNumberValue(cleanValStr);
           if (realFloatValue !== this.value) {
@@ -305,7 +344,7 @@ Custom property | Description | Default
         },
 
         _applyCurrencyAmountFormat: function(value) {
-          value = value ? value.toString() : '';
+          value = this._getStrValue(value);
           var formattedValue = '';
           var _valueParts = value.split('.');
           /**
@@ -323,11 +362,13 @@ Custom property | Description | Default
           return formattedValue;
         },
 
-        _getValueWithoutFormat: function(value, decimalsNr) {
+        _getValueWithoutFormat: function(value, decimalsNr, needsStrValue) {
           if (!decimalsNr) {
             decimalsNr = 0;
           }
-          value = value ? value.toString() : '';
+          if (needsStrValue) {
+            value = this._getStrValue(value);
+          }
           var _values = value.split('.');
           var _decimals = '';
           var _floatingPoints = _values.length - 1;
@@ -407,6 +448,9 @@ Custom property | Description | Default
                 // add second missing decimal
                 this.set('_internalValue', this._internalValue + '0');
               }
+            }
+            if (this._internalValue.substr(0, 1) === '.') {
+              this.set('_internalValue',  '0' + this._internalValue);
             }
           }
         }
