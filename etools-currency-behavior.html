@@ -26,8 +26,9 @@
       if (!placeholder) {
         placeholder = '—';
       }
-      if (typeof noOfDecimals != 'number')
+      if (typeof noOfDecimals !== 'number') {
         noOfDecimals = 2;
+      }
       if (!value) {
         return placeholder;
       }
