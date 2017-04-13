@@ -2,6 +2,16 @@
 <link rel="import" href="../etools-currency-amount-input.html">
 
 <dom-module id="demo-helper">
+  <template>
+    <etools-currency-amount-input label="UNICEF Supply (USD)"
+                                  value="{{dataSetModel.in_kind_amount}}"
+                                  placeholder="&#8212;"
+                                  readonly$="[[!editMode]]"
+                                  required$="[[required]]"
+                                  auto-validate
+                                  error-message="UNICEF Supply (USD) required">
+    </etools-currency-amount-input>
+  </template>
   <script>
     (function() {
       // jscs:disable
@@ -15,7 +25,21 @@
             type: String,
             value: '',
             notify: true
-          }
+          },
+          dataSetModel: {
+            type: Object,
+            value: null,
+            notify: true
+          },
+          required: {
+            type: Boolean,
+            value: true
+          },
+          editMode: {
+            type: Boolean,
+            value: true,
+            observer: '_editModeChanged'
+          },
         },
 
         ready: function() {
@@ -23,6 +47,25 @@
           setTimeout(function() {
             //this.set('inputValue', 13876533.5678);
           }.bind(this), 7000);
+
+          this.dataSetModel = {
+            id: null,
+            partner_contribution: 0,
+            unicef_cash: 0,
+            in_kind_amount: 0,
+            partner_contribution_local: 0,
+            unicef_cash_local: 0,
+            in_kind_amount_local: 0,
+            year: null,
+            total: 0,
+            currency: null
+          };
+        },
+
+        _editModeChanged: function(newValue, oldValue) {
+          if (newValue !== oldValue) {
+            this.updateStyles();
+          }
         }
         
       });
