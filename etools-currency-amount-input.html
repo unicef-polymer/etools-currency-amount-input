@@ -338,9 +338,19 @@ Custom property | Description | Default
         },
 
         _updateElementInternalValue: function(value, ironInput, cursorPos) {
-          this.$.currencyInput.updateValueAndPreserveCaret(value);
-          ironInput.selectionStart = ironInput.selectionEnd = cursorPos;
-          this.$.currencyInput._handleAutoValidate();
+          var currencyInput = this.$.currencyInput;
+          currencyInput.updateValueAndPreserveCaret(value);
+
+          try {
+            // "Not all elements might have selection, and even if they have the
+            // right properties, accessing them might throw an exception"(PaperInputBehavior)
+            ironInput.selectionStart = cursorPos;
+            ironInput.selectionEnd = cursorPos;
+          } catch (err) {
+            // IE11 throws unspecified error when setting selectionStart and selectionEnd
+            // no need to log this error, IE11
+          }
+          currencyInput._handleAutoValidate();
         },
 
         _applyCurrencyAmountFormat: function(value) {
