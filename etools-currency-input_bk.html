@@ -5,7 +5,7 @@
 `etools-currency-input`
 
 
-@demo demo/index.html 
+@demo demo/index.html
 -->
 
 <dom-module id="etools-currency-input">
@@ -113,6 +113,7 @@
           // format value as currency amount and set it as internal value
           var val = this._formatNumber(value);
           this.set('internalValue', val);
+          // eslint-disable-next-line no-console
           console.log('value changed: ', value, this.internalValue);
         },
         _formatNumber: function(numStr) {
@@ -136,7 +137,7 @@
             return null;
           }
           if (decimals) {
-            return floatVal.toFixed(decimals);  
+            return floatVal.toFixed(decimals);
           }
           return floatVal;
         },
@@ -148,7 +149,7 @@
               return;
             }
           }
-          
+
           this.debounce('_internalValueChange', function() {
             // re-format internal value
             internalValue = this._getFloatNrStr(internalValue);
@@ -156,9 +157,9 @@
             this.set('internalValue', val);
             // update real value
             this.set('value', this._getRealNumberValue(internalValue));
+            // eslint-disable-next-line no-console
             console.log(this.internalValue, this.value);
           }.bind(this), 300);
-
         },
 
         _getFloatNrStr: function(value) {
