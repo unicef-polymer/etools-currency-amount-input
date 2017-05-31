@@ -1,7 +1,7 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../paper-input/paper-input.html">
 
-<link rel="import" href="./etools-currency-behavior.html">
+<link rel="import" href="etools-currency-behavior.html">
 
 <!--
 `etools-currency-input`
@@ -101,6 +101,7 @@ Custom property | Description | Default
       'use strict';
       Polymer({
         is: 'etools-currency-amount-input',
+        // eslint-disable-next-line no-undef
         behaviors: [etoolsBehaviors.EtoolsCurrencyBehavior],
         properties: {
           label: String,
@@ -336,7 +337,7 @@ Custom property | Description | Default
         _formatValue: function(value) {
           value = this._getValueWithoutFormat(value, 2);
           // re-apply format
-          var value = this._applyCurrencyAmountFormat(value);
+          value = this._applyCurrencyAmountFormat(value);
           return value.trim();
         },
 
@@ -365,8 +366,8 @@ Custom property | Description | Default
            * _valueParts[1] - decimals, if any
            */
           if (_valueParts[0] !== '') {
-            var formattedValue = this.addCurrencyAmountDelimiter(_valueParts[0]);
             var decimalsPart = _valueParts[1];
+            formattedValue = this.addCurrencyAmountDelimiter(_valueParts[0]);
 
             if (!this._emptyValue(decimalsPart)) {
               formattedValue += '.' + decimalsPart;
@@ -463,7 +464,7 @@ Custom property | Description | Default
               }
             }
             if (this._internalValue.substr(0, 1) === '.') {
-              this.set('_internalValue',  '0' + this._internalValue);
+              this.set('_internalValue', '0' + this._internalValue);
             }
           }
         }
