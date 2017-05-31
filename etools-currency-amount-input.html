@@ -33,7 +33,7 @@ Custom property | Description | Default
 `--etools-currency-container-underline-focus` | Mixin applied to the paper-input underline when it's focused | `{}`
 `--etools-currency-container-underline-disabled` | Mixin applied to the paper-input underline when it's disabled | `{}`
 
-@demo demo/index.html 
+@demo demo/index.html
 -->
 
 <dom-module id="etools-currency-amount-input">
@@ -190,7 +190,10 @@ Custom property | Description | Default
           if (isNaN(currentValue)) {
             currentValue = null;
           }
-          var internalVal = parseFloat(this._getValueWithoutFormat(this._internalValue, 2, true)).toFixed(2);
+          var internalVal = this._internalValue;
+          if (internalVal) {
+            internalVal = parseFloat(this._getValueWithoutFormat(this._internalValue, 2, true)).toFixed(2);
+          }
           if (currentValue !== internalVal) {
             this.set('_internalValue', currentValue);
           }
