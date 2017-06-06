@@ -90,7 +90,7 @@ Custom property | Description | Default
                  readonly$="[[readonly]]"
                  required$="[[required]]"
                  invalid="{{invalid}}"
-                 auto-validate$="[[_computeAutovalidate(autoValidate, readonly)]]"
+                 auto-validate$="[[autoValidate]]"
                  error-message="[[errorMessage]]"
                  no-label-float="[[noLabelFloat]]">
       <div prefix class="prefix" hidden$=[[!currency]]>[[currency]]</div>
@@ -102,6 +102,7 @@ Custom property | Description | Default
       'use strict';
       Polymer({
         is: 'etools-currency-amount-input',
+        // eslint-disable-next-line no-undef
         behaviors: [etoolsBehaviors.EtoolsCurrencyBehavior],
         properties: {
           label: String,
@@ -160,18 +161,8 @@ Custom property | Description | Default
 
         observers: ['_updateStyles(readonly, disabled, invalid)'],
 
-        _updateStyles: function(readonly) {
-          if (readonly) {
-            this.set('invalid', false);
-          }
+        _updateStyles: function() {
           this.updateStyles();
-        },
-
-        _computeAutovalidate: function(autoValidate, readonly) {
-          if (readonly) {
-            return false;
-          }
-          return autoValidate;
         },
 
         validate: function() {
@@ -202,7 +193,10 @@ Custom property | Description | Default
           if (isNaN(currentValue)) {
             currentValue = null;
           }
-          var internalVal = parseFloat(this._getValueWithoutFormat(this._internalValue, 2, true)).toFixed(2);
+          var internalVal = this._internalValue;
+          if (internalVal) {
+            internalVal = parseFloat(this._getValueWithoutFormat(this._internalValue, 2, true)).toFixed(2);
+          }
           if (currentValue !== internalVal) {
             this.set('_internalValue', currentValue);
           }
@@ -345,7 +339,7 @@ Custom property | Description | Default
         _formatValue: function(value) {
           value = this._getValueWithoutFormat(value, 2);
           // re-apply format
-          var value = this._applyCurrencyAmountFormat(value);
+          value = this._applyCurrencyAmountFormat(value);
           return value.trim();
         },
 
@@ -362,9 +356,7 @@ Custom property | Description | Default
             // IE11 throws unspecified error when setting selectionStart and selectionEnd
             // no need to log this error, IE11
           }
-          if (!this.readonly) {
-            currencyInput._handleAutoValidate();
-          }
+          currencyInput._handleAutoValidate();
         },
 
         _applyCurrencyAmountFormat: function(value) {
@@ -376,8 +368,8 @@ Custom property | Description | Default
            * _valueParts[1] - decimals, if any
            */
           if (_valueParts[0] !== '') {
-            var formattedValue = this.addCurrencyAmountDelimiter(_valueParts[0]);
             var decimalsPart = _valueParts[1];
+            formattedValue = this.addCurrencyAmountDelimiter(_valueParts[0]);
 
             if (!this._emptyValue(decimalsPart)) {
               formattedValue += '.' + decimalsPart;
@@ -474,7 +466,7 @@ Custom property | Description | Default
               }
             }
             if (this._internalValue.substr(0, 1) === '.') {
-              this.set('_internalValue',  '0' + this._internalValue);
+              this.set('_internalValue', '0' + this._internalValue);
             }
           }
         }
