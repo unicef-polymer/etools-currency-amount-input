@@ -91,7 +91,8 @@ Custom property | Description | Default
                  required$="[[required]]"
                  invalid$="{{invalid}}"
                  auto-validate$="[[autoValidate]]"
-                 error-message="[[errorMessage]]">
+                 error-message="[[errorMessage]]"
+                 no-label-float="[[noLabelFloat]]">
       <div prefix class="prefix" hidden$=[[!currency]]>[[currency]]</div>
     </paper-input>
   </template>
@@ -105,6 +106,7 @@ Custom property | Description | Default
         behaviors: [etoolsBehaviors.EtoolsCurrencyBehavior],
         properties: {
           label: String,
+          noLabelFloat: Boolean,
           _internalValue: {
             type: String,
             notify: true,
