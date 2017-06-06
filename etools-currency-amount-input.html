@@ -90,7 +90,7 @@ Custom property | Description | Default
                  readonly$="[[readonly]]"
                  required$="[[required]]"
                  invalid="{{invalid}}"
-                 auto-validate$="[[autoValidate]]"
+                 auto-validate$="[[_computeAutovalidate(autoValidate, readonly)]]"
                  error-message="[[errorMessage]]"
                  no-label-float="[[noLabelFloat]]">
       <div prefix class="prefix" hidden$=[[!currency]]>[[currency]]</div>
@@ -161,8 +161,18 @@ Custom property | Description | Default
 
         observers: ['_updateStyles(readonly, disabled, invalid)'],
 
-        _updateStyles: function() {
+        _updateStyles: function(readonly) {
+          if (readonly) {
+            this.set('invalid', false);
+          }
           this.updateStyles();
+        },
+
+        _computeAutovalidate: function(autoValidate, readonly) {
+          if (readonly) {
+            return false;
+          }
+          return autoValidate;
         },
 
         validate: function() {
@@ -356,7 +366,9 @@ Custom property | Description | Default
             // IE11 throws unspecified error when setting selectionStart and selectionEnd
             // no need to log this error, IE11
           }
-          currencyInput._handleAutoValidate();
+          if (!this.readonly && this.autoValidate) {
+            currencyInput._handleAutoValidate();
+          }
         },
 
         _applyCurrencyAmountFormat: function(value) {
