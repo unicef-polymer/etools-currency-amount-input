@@ -1,0 +1,47 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../etools-currency-amount-input.html">
+
+<dom-module id="demo-element">
+  <template>
+    <style>
+      :host {
+        /* host CSS */
+      }
+    </style>
+
+    <p>The value will change to `13876533.5678` in 10 seconds. The field should format the new value.</p>
+
+    <etools-currency-amount-input label="Currency amount example with value provided"
+                                  value="{{inputValue}}" currency="$"></etools-currency-amount-input>
+
+  </template>
+  <script>
+    class DemoElement extends Polymer.Element {
+
+      static get is() {
+        return 'demo-element';
+      }
+
+      static get properties() {
+        return {
+          inputValue: {
+            type: String,
+            value: '',
+            notify: true
+          }
+        };
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+        this.set('inputValue', 123);
+        setTimeout(() => {
+          this.set('inputValue', 13876533.5678);
+        }, 10000);
+      }
+
+    }
+
+    window.customElements.define(DemoElement.is, DemoElement);
+  </script>
+</dom-module>
