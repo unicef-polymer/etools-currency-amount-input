@@ -237,10 +237,6 @@ Custom property | Description | Default
           this._updateElementInternalValue(formattedValue, ironInput, currentCursorPossition);
         },
 
-        _getInputElement: function() {
-          return this.$.currencyInput.inputElement;
-        },
-
         /**
          * Internal value changed, needs to be checked and changed to US currency format
          */
@@ -250,7 +246,7 @@ Custom property | Description | Default
           }
 
           // get internal iron-input and ensure _internalValue is string
-          var ironInput = this._getInputElement();
+          var ironInput = Polymer.dom(this.$.currencyInput.root).querySelector('#input');
           value = this._getStrValue(value);
           oldValue = this._getStrValue(oldValue);
 
