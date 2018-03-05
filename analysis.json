@@ -4622,7 +4622,7 @@
         }
       },
       "privacy": "public",
-      "name": "EtoolsCurrencyMixin",
+      "name": "EtoolsMixins.EtoolsCurrency",
       "attributes": [],
       "events": [],
       "styling": {

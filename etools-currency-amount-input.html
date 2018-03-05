@@ -64,10 +64,10 @@
      *
      * @customElement
      * @polymer
-     * @appliesMixin EtoolsCurrencyMixin
+     * @appliesMixin EtoolsMixins.EtoolsCurrency
      * @demo demo/index.html
      */
-    class EtoolsCurrencyAmountInput extends EtoolsCurrencyMixin(Polymer.Element) {
+    class EtoolsCurrencyAmountInput extends EtoolsMixins.EtoolsCurrency(Polymer.Element) {
       static get is() { return 'etools-currency-amount-input'; }
       static get properties() {
         return {

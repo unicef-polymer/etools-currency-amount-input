@@ -1,10 +1,12 @@
 <script>
-  /*
+  // @namespace EtoolsMixins
+  window.EtoolsMixins = window.EtoolsMixins || {};
+  /**
    * Currency amount input. US format only.
    * @polymer
    * @mixinFunction
    */
-  EtoolsCurrencyMixin = Polymer.dedupingMixin((superClass) => class extends superClass {
+  EtoolsMixins.EtoolsCurrency = Polymer.dedupingMixin((superClass) => class extends superClass {
     /**
      * Format value as currency amount. Delimited used ', '
      */

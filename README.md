@@ -7,7 +7,7 @@ the internal value and when internal value is changed, element's value will be u
 
 ![etools-currency-input-img](etools-currency-input.png)
 
-To only display values as currency amounts you can use `EtoolsCurrencyMixin`
+To only display values as currency amounts you can use `EtoolsMixins.EtoolsCurrency`
 `displayCurrencyAmount` method.
 
 ### Element properties
