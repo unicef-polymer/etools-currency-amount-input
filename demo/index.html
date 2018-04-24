@@ -4,32 +4,22 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
-    <title>etools-currency-input demo</title>
+    <title>etools-currency-amount-input demo</title>
 
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
     <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
-    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
-    <link rel="import" href="../etools-currency-amount-input.html">
+    <link rel="import" href="demo-element.html">
 
-    <link rel="import" href="demo-helper.html">
-
-    <style is="custom-style" include="demo-pages-shared-styles">
-    </style>
+    <custom-style>
+      <style is="custom-style" include="demo-pages-shared-styles">
+      </style>
+    </custom-style>
   </head>
   <body>
     <div class="vertical-section-container centered">
-      <h3>Basic etools-currency-input demo</h3>
-      <demo-snippet>
-        <template is="dom-bind">
-          <demo-helper input-value="{{value}}"></demo-helper>
-
-          <!--<etools-currency-amount-input label="Currency amount example"-->
-                                        <!--currency="$"></etools-currency-amount-input>-->
-          <etools-currency-amount-input label="Currency amount example with value provided"
-                                        value="{{value}}" currency="$"></etools-currency-amount-input>
-        </template>
-      </demo-snippet>
+      <h3>Basic etools-currency-amount-input demo</h3>
+      <demo-element></demo-element>
     </div>
   </body>
 </html>
