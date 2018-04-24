@@ -46,7 +46,8 @@
      * `etools-currency-amount-input`
      *
      * A paper-input element that allows only currency amount values (US format). It accepts only digits, comma, a
-     * a single floating point (period), and allows 2 decimals. The maximum number you can have 12 digits until floating point.
+     * a single floating point (period), and allows 2 decimals. The maximum number you can have 12 digits until
+     * floating point.
      * The value displayed it's paper-input's internal value. The `value` property of this element will update and format
      * the internal value and when internal value is changed, element's value will be updated with current float value.
      *
@@ -68,7 +69,9 @@
      * @demo demo/index.html
      */
     class EtoolsCurrencyAmountInput extends EtoolsMixins.EtoolsCurrency(Polymer.Element) {
-      static get is() { return 'etools-currency-amount-input'; }
+      static get is() {
+        return 'etools-currency-amount-input';
+      }
       static get properties() {
         return {
           label: String,
@@ -95,7 +98,7 @@
           disabled: {
             type: Boolean,
             value: false,
-            reflectToAttribute: true,
+            reflectToAttribute: true
           },
           required: {
             type: Boolean,
