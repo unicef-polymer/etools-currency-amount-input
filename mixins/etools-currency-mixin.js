@@ -1,15 +1,15 @@
-<script type="module" src="node_modules/@polymer/polymer/polymer-legacy.js"></script>
-<script type="module">
-// import '../@polymer/polymer/polymer-legacy.js';
-window.etoolsBehaviors = window.etoolsBehaviors || {};
+import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 
-/** @polymerBehavior etoolsBehaviors.EtoolsCurrencyBehavior */
-etoolsBehaviors.EtoolsCurrencyBehavior = { // eslint-disable-line no-undef
-
+/**
+ * Currency amount input. US format only.
+ * @polymer
+ * @mixinFunction
+ */
+export const EtoolsCurrency = dedupingMixin(superClass => class extends superClass {
   /**
    * Format value as currency amount. Delimited used ', '
    */
-  addCurrencyAmountDelimiter: function(value) {
+  addCurrencyAmountDelimiter(value) {
     if (!value) {
       return '';
     }
@@ -18,13 +18,13 @@ etoolsBehaviors.EtoolsCurrencyBehavior = { // eslint-disable-line no-undef
       return '';
     }
     return value.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
-  },
+  }
 
   /**
    * Format value as currency amount and return it to be displayed
    * Use this to display readonly currency amounts on interface
    */
-  displayCurrencyAmount: function(value, placeholder, noOfDecimals) {
+  displayCurrencyAmount(value, placeholder, noOfDecimals) {
     if (!placeholder) {
       placeholder = '—';
     }
@@ -34,13 +34,11 @@ etoolsBehaviors.EtoolsCurrencyBehavior = { // eslint-disable-line no-undef
     if (!value) {
       return placeholder;
     }
-    var floatValue = parseFloat(value).toFixed(noOfDecimals);
+    let floatValue = parseFloat(value).toFixed(noOfDecimals);
     if (isNaN(floatValue)) {
       return placeholder;
     }
 
     return this.addCurrencyAmountDelimiter(floatValue);
   }
-
-};
-</script>
+});

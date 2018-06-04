@@ -1,25 +1,32 @@
 <!doctype html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
     <title>etools-currency-amount-input demo</title>
 
-    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
 
-    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
-    <link rel="import" href="demo-element.html">
+    <script type="module" src="../node_modules/@polymer/iron-demo-helpers/demo-pages-shared-styles.js"></script>
+    <script type="module" src="./demo-element.js"></script>
 
-    <custom-style>
+
       <style is="custom-style" include="demo-pages-shared-styles">
+        .centered{
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
       </style>
-    </custom-style>
-  </head>
-  <body>
+
+</head>
+<body>
+
     <div class="vertical-section-container centered">
       <h3>Basic etools-currency-amount-input demo</h3>
       <demo-element></demo-element>
     </div>
-  </body>
+
+</body>
 </html>

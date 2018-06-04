@@ -1,5 +1,5 @@
-<link rel="import" href="../../polymer/polymer.html">
-<link rel="import" href="../etools-currency-amount-input.html">
+<script type="module" src="../node_modules/@polymer/polymer/polymer-legacy.js"></script>
+<script type="module" src="../etools-currency-amount-input.js"></script>
 
 <dom-module id="demo-helper">
   <template>
@@ -12,64 +12,62 @@
                                   error-message="UNICEF Supply (USD) required">
     </etools-currency-amount-input>
   </template>
-  <script>
-    (function() {
-      // jscs:disable
-      'use strict';
+  <script type="module">
+// import '../../@polymer/polymer/polymer-legacy.js';
+// import '../etools-currency-amount-input.js';
+import { Polymer } from '../node_modules/@polymer/polymer/lib/legacy/polymer-fn.js';
 
-      Polymer({
-        is: 'demo-helper',
+Polymer({
+  is: 'demo-helper',
 
-        properties: {
-          inputValue: {
-            type: String,
-            value: '',
-            notify: true
-          },
-          dataSetModel: {
-            type: Object,
-            value: null,
-            notify: true
-          },
-          required: {
-            type: Boolean,
-            value: true
-          },
-          editMode: {
-            type: Boolean,
-            value: true,
-            observer: '_editModeChanged'
-          },
-        },
+  properties: {
+    inputValue: {
+      type: String,
+      value: '',
+      notify: true
+    },
+    dataSetModel: {
+      type: Object,
+      value: null,
+      notify: true
+    },
+    required: {
+      type: Boolean,
+      value: true
+    },
+    editMode: {
+      type: Boolean,
+      value: true,
+      observer: '_editModeChanged'
+    },
+  },
 
-        ready: function() {
-          this.set('inputValue', 123);
-          setTimeout(function() {
-            //this.set('inputValue', 13876533.5678);
-          }.bind(this), 7000);
+  ready: function() {
+    this.set('inputValue', 123);
+    setTimeout(function() {
+      //this.set('inputValue', 13876533.5678);
+    }.bind(this), 7000);
 
-          this.dataSetModel = {
-            id: null,
-            partner_contribution: 0,
-            unicef_cash: 0,
-            in_kind_amount: 0,
-            partner_contribution_local: 0,
-            unicef_cash_local: 0,
-            in_kind_amount_local: 0,
-            year: null,
-            total: 0,
-            currency: null
-          };
-        },
+    this.dataSetModel = {
+      id: null,
+      partner_contribution: 0,
+      unicef_cash: 0,
+      in_kind_amount: 0,
+      partner_contribution_local: 0,
+      unicef_cash_local: 0,
+      in_kind_amount_local: 0,
+      year: null,
+      total: 0,
+      currency: null
+    };
+  },
 
-        _editModeChanged: function(newValue, oldValue) {
-          if (newValue !== oldValue) {
-            this.updateStyles();
-          }
-        }
-        
-      });
-
-    })();
-  </script>
+  _editModeChanged: function(newValue, oldValue) {
+    if (newValue !== oldValue) {
+      this.updateStyles();
+    }
+  }
+  
+});
+</script>
 </dom-module>
