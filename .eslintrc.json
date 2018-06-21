@@ -24,7 +24,6 @@
   "globals": {
     "moment": true,
     "Promise": true,
-    "Polymer": true,
-    "EtoolsMixins": true
+    "Polymer": true
   }
 }

@@ -1,7 +1,7 @@
-import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import '@polymer/paper-input/paper-input.js';
-import { EtoolsCurrency } from './mixins/etools-currency-mixin.js';
-import { html } from '@polymer/polymer/lib/utils/html-tag.js';
+import {EtoolsCurrency} from './mixins/etools-currency-mixin.js';
+
 /**
  * `etools-currency-amount-input`
  *
@@ -25,37 +25,43 @@ import { html } from '@polymer/polymer/lib/utils/html-tag.js';
  *
  * @customElement
  * @polymer
- * @appliesMixin EtoolsMixins.EtoolsCurrency
+ * @appliesMixin EtoolsCurrency
  * @demo demo/index.html
  */
 class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
   static get template() {
+    // language=HTML
     return html`
-    <style>
-      *[hidden] {
-        display: none !important;
-      }
+      <style>
+        *[hidden] {
+          display: none !important;
+        }
 
-      :host {
-        display: block;
-        width: 100%;
-        @apply --etools-currency-input;
+        :host {
+          display: block;
+          width: 100%;
+          @apply --etools-currency-input;
 
-        --paper-input-prefix: {
-          margin-right: 5px;
-        };
-      }
-    </style>
+          --paper-input-prefix: {
+            margin-right: 5px;
+          };
+        }
+      </style>
 
-    <paper-input id="currencyInput" label="[[label]]" value="{{_internalValue}}" allowed-pattern="[0-9\\.\\,]" placeholder="[[placeholder]]" disabled\$="[[disabled]]" on-keydown="_onKeyDown" on-blur="_onBlur" readonly\$="[[readonly]]" required\$="[[required]]" invalid="{{invalid}}" auto-validate\$="[[_computeAutovalidate(autoValidate, readonly)]]" error-message="[[errorMessage]]" no-label-float="[[noLabelFloat]]">
-      <div slot="prefix" class="prefix" hidden\$="[[!currency]]">[[currency]]</div>
-    </paper-input>
-`;
+      <paper-input id="currencyInput" label="[[label]]" value="{{_internalValue}}" allowed-pattern="[0-9\\.\\,]"
+                   placeholder="[[placeholder]]" disabled\$="[[disabled]]" on-keydown="_onKeyDown" on-blur="_onBlur"
+                   readonly\$="[[readonly]]" required\$="[[required]]" invalid="{{invalid}}"
+                   auto-validate\$="[[_computeAutovalidate(autoValidate, readonly)]]" error-message="[[errorMessage]]"
+                   no-label-float="[[noLabelFloat]]">
+        <div slot="prefix" class="prefix" hidden\$="[[!currency]]">[[currency]]</div>
+      </paper-input>
+    `;
   }
 
   static get is() {
     return 'etools-currency-amount-input';
   }
+
   static get properties() {
     return {
       label: String,
@@ -112,6 +118,7 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
       }
     };
   }
+
   static get observers() {
     return [
       '_updateStyles(readonly, disabled, invalid)'
