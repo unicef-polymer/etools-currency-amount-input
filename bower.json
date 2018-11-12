@@ -1,6 +1,0 @@
-{
-  "name": "etools-currency-amount-input",
-  "description": "A paper-input element that allows only currency amount values. US currency format only.",
-  "version": "2.0.0",
-  "license": "https://github.com/unicef-polymer/etools-currency-amount-input/blob/master/LICENSE.md"
-}
