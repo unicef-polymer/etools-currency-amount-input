@@ -6,7 +6,7 @@
   "license": "https://github.com/unicef-polymer/etools-currency-amount-input/blob/master/LICENSE.md",
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@polymer/paper-input": "^3.0.0-pre.18"
+    "@polymer/paper-input": "^3.0.0"
   },
   "devDependencies": {
     "eslint": "^3.19.0",
