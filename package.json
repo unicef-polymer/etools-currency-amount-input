@@ -28,6 +28,6 @@
   "scripts": {
     "lint:javascript": "eslint . --ext js,html && polymer lint && exit 0",
     "lint": "npm run lint:javascript && polymer lint && exit 0",
-    "gen-typings": "gen-typescript-declarations"
+    "gen-typings": "gen-typescript-declarations  --deleteExisting --outDir './'"
   }
 }
