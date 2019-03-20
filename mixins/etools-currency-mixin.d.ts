@@ -26,6 +26,6 @@ declare function EtoolsCurrency(base: Constructor<PolymerElement>):
 {
  new (...args: any[]): {
    addCurrencyAmountDelimiter(value: any): any;
-   displayCurrencyAmount(value: any, placeholder: any, noOfDecimals: any): any;
+   displayCurrencyAmount(value: any, placeholder?: any, noOfDecimals?: any): any;
  }
 } & Constructor<PolymerElement>;
