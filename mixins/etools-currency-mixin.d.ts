@@ -12,32 +12,20 @@
 // tslint:disable:variable-name Describing an API that's defined elsewhere.
 // tslint:disable:no-any describes the API as best we are able today
 
-import {dedupingMixin} from '@polymer/polymer/lib/utils/mixin.js';
-
+import { PolymerElement } from '@polymer/polymer';
 export {EtoolsCurrency};
 
 
+interface Constructor<T = {}> {
+  new (...args: any[]) : T;
+ }
 /**
- * Currency amount input. US format only.
- */
-declare function EtoolsCurrency<T extends new (...args: any[]) => {}>(base: T): T & EtoolsCurrencyConstructor;
-
-interface EtoolsCurrencyConstructor {
-  new(...args: any[]): EtoolsCurrency;
-}
-
-export {EtoolsCurrencyConstructor};
-
-interface EtoolsCurrency {
-
-  /**
-   * Format value as currency amount. Delimited used ', '
-   */
-  addCurrencyAmountDelimiter(value: any): any;
-
-  /**
-   * Format value as currency amount and return it to be displayed
-   * Use this to display readonly currency amounts on interface
-   */
-  displayCurrencyAmount(value: any, placeholder: any, noOfDecimals: any): any;
-}
+* Currency amount input. US format only.
+*/
+declare function EtoolsCurrency(base: Constructor<PolymerElement>):
+{
+ new (...args: any[]): {
+   addCurrencyAmountDelimiter(value: any): any;
+   displayCurrencyAmount(value: any, placeholder: any, noOfDecimals: any): any;
+ }
+} & Constructor<PolymerElement>;
