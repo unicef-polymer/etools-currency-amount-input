@@ -2,7 +2,7 @@
   "name": "etools-currency-amount-input",
   "version": "2.0.0",
   "devDependencies": {
-    "eslint": "^3.19.0",
+    "eslint": "^6.6.0",
     "eslint-config-google": "^0.7.0",
     "eslint-plugin-html": "^2.0.0"
   },
