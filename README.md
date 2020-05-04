@@ -7,7 +7,7 @@ the internal value and when internal value is changed, element's value will be u
 
 ![etools-currency-input-img](etools-currency-input.png)
 
-To only display values as currency amounts you can use `EtoolsMixins.EtoolsCurrency`
+To only display values as currency amounts you can use `EtoolsCurrency` mixin,
 `displayCurrencyAmount` method.
 
 ### Element properties
@@ -39,31 +39,26 @@ Custom property | Description | Default
 `--etools-currency-input` | Mixin applied to currency element | `{}`
 
 ## Install
+TODO: create npm package
+```bash
+$ npm i --save unicef-polymer/etools-currency-amount-input#branch_name
+```
+
+## Linting the code
+
+Install local npm packages (run `npm install`)
+Then just run the linting task
 
 ```bash
-$ bower install --save etools-currency-input
-```
-
-## Install the Polymer-CLI
-
-First, make sure you have the [Polymer CLI](https://www.npmjs.com/package/polymer-cli) installed. Then run `polymer serve` to serve your element locally.
-
-## Viewing Your Element
-
-```
-$ polymer serve
-```
-
-## Running Tests
-
-```
-$ polymer test
-```
-
-## Linting
-
-```
 $ npm run lint
 ```
 
-Your application is already set up to be tested via [web-component-tester](https://github.com/Polymer/web-component-tester). Run `polymer test` to run your application's test suite locally.
+## Preview element locally
+Install needed dependencies by running: `$ npm install`.
+Make sure you have the [Polymer CLI](https://www.npmjs.com/package/polymer-cli) installed. Then run `$ polymer serve` to serve your element application locally.
+
+## Running Tests
+TODO: improve and add more tests
+```
+$ polymer test
+```
