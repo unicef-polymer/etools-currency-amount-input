@@ -1,9 +1,18 @@
 {
   "description": "A paper-input element that allows only currency amount values. US currency format only.",
-  "name": "etools-currency-amount-input",
-  "version": "2.0.0",
+  "name": "@unicef-polymer/etools-currency-amount-input",
+  "version": "3.0.0-rc.1",
+  "homepage": "https://github.com/unicef-polymer/etools-currency-amount-input",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/unicef-polymer/etools-currency-amount-input.git"
+  },
   "main": "etools-currency-amount-input.js",
   "license": "https://github.com/unicef-polymer/etools-currency-amount-input/blob/master/LICENSE.md",
+  "scripts": {
+    "lint:javascript": "eslint . --ext js,html && polymer lint && exit 0",
+    "lint": "npm run lint:javascript && polymer lint && exit 0"
+  },
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
     "@polymer/paper-input": "^3.0.0"
@@ -12,10 +21,10 @@
     "eslint": "^3.19.0",
     "eslint-config-google": "^0.7.0",
     "eslint-plugin-html": "^2.0.0",
-    "@polymer/iron-demo-helpers": "^3.0.0-pre.18",
+    "@polymer/iron-demo-helpers": "^3.0.0",
     "wct-browser-legacy": "^0.0.1-pre.11",
     "@webcomponents/webcomponentsjs": "^2.0.0",
-    "@polymer/iron-component-page": "^3.0.0-pre.18"
+    "@polymer/iron-component-page": "^4.0.0"
   },
   "resolutions": {
     "inherits": "2.0.3",
@@ -23,9 +32,5 @@
     "supports-color": "3.1.2",
     "type-detect": "1.0.0",
     "@webcomponents/webcomponentsjs": "2.0.0-beta.2"
-  },
-  "scripts": {
-    "lint:javascript": "eslint . --ext js,html && polymer lint && exit 0",
-    "lint": "npm run lint:javascript && polymer lint && exit 0"
   }
 }
