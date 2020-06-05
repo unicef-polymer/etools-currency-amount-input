@@ -37,9 +37,7 @@ import {EtoolsCurrency} from './mixins/etools-currency-mixin.js';
  *
  * `--etools-currency-input` | Mixin applied to currency element | `{}`
  */
-declare class EtoolsCurrencyAmountInput extends
-  EtoolsCurrency(
-  Object) {
+declare class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
   label: string|null|undefined;
   noLabelFloat: boolean|null|undefined;
   _internalValue: string|null|undefined;
