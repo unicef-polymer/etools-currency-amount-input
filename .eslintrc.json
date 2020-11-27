@@ -1,7 +1,8 @@
 {
   "extends": ["eslint:recommended", "google"],
   "parserOptions": {
-    "ecmaVersion": 6
+    "ecmaVersion": 6,
+    "sourceType": "module"
   },
   "env": {
     "browser": true
@@ -11,6 +12,7 @@
   ],
   "rules": {
     "padded-blocks": "off",
+    "linebreak-style": "off",
     "brace-style": "off",
     "new-cap": ["error", { "capIsNewExceptions": ["Polymer"], "capIsNewExceptionPattern": "^Etools.." }],
     "no-var": "off",
