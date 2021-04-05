@@ -174,9 +174,9 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
 
   _restoreDamagedInternalValue(value, ironInput, currentCursorPossition) {
     // search for wrong delimiters and repair value's format
-    let formattedValue = this._formatValue(value);
-    let currentValCurrencyDelimitersNr = value.split(',').length;
-    let formattedValCurrencyDelimitersNr = formattedValue.split(',').length;
+    const formattedValue = this._formatValue(value);
+    const currentValCurrencyDelimitersNr = value.split(',').length;
+    const formattedValCurrencyDelimitersNr = formattedValue.split(',').length;
 
     if (currentValCurrencyDelimitersNr === formattedValCurrencyDelimitersNr) {
       // no change
@@ -210,7 +210,7 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
     }
 
     // get internal iron-input and ensure _internalValue is string
-    let ironInput = this._getInputElement();
+    const ironInput = this._getInputElement();
 
     value = this._getStrValue(value);
     oldValue = this._getStrValue(oldValue);
@@ -226,10 +226,10 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
     }
 
     // get cursor current position
-    let currentCursorPossition = ironInput.selectionStart;
+    const currentCursorPossition = ironInput.selectionStart;
 
     // floating point/period can be added just one and only at the end of the string
-    let floatingPointPos = value.indexOf('.');
+    const floatingPointPos = value.indexOf('.');
     if (floatingPointPos > -1 && (floatingPointPos + 1) < value.length - (oldValue.indexOf('.') > -1 ? 4 : 3)) {
       // floating point can be added only at the end of the string, starting with the last 2 digits
       this._updateElementInternalValue(value.replace('.', ''), ironInput, currentCursorPossition - 1);
@@ -247,7 +247,7 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
       return;
     }
 
-    let charsAfterCursor = value.substr(currentCursorPossition).length;
+    const charsAfterCursor = value.substr(currentCursorPossition).length;
 
     if (value.substring(0, 1) === '.') {
       // no integer value, only floating point and decimals
@@ -261,7 +261,7 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
     }
 
     // update cursor position
-    let updatedCursorPossition = this._getUpdatedCursorPosition(value, charsAfterCursor, oldValue);
+    const updatedCursorPossition = this._getUpdatedCursorPosition(value, charsAfterCursor, oldValue);
 
     this._updateElementInternalValue(value, ironInput, updatedCursorPossition);
     this._setExternalValue(value, preserveFloatingPoint);
@@ -269,10 +269,10 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
 
   _getUpdatedCursorPosition(value, charsAfterCursor, oldValue) {
     let updatedCursorPossition = value.length - charsAfterCursor;
-    let floatingPointPos = value.indexOf('.');
+    const floatingPointPos = value.indexOf('.');
     if (floatingPointPos > -1) {
       // check cursor pos relative to floating point, only if floating point is not new
-      let newFloatingPoint = oldValue.indexOf('.') === -1;
+      const newFloatingPoint = oldValue.indexOf('.') === -1;
       if (updatedCursorPossition >= floatingPointPos + 1 && !newFloatingPoint) {
         updatedCursorPossition++;
       }
@@ -286,7 +286,7 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
    */
   _setExternalValue(value, preserveFloatingPoint) {
     let cleanValStr = this._getValueWithoutFormat(value, 2);
-    let valuePieces = cleanValStr.split('.');
+    const valuePieces = cleanValStr.split('.');
     let limitExceeded = false;
     if (valuePieces[0].length > this._charsLimit) {
       // limit number integer part to max 12 digits
@@ -301,7 +301,7 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
       this.set('_internalValue', this.addCurrencyAmountDelimiter(cleanValStr));
       return;
     }
-    let realFloatValue = this._getRealNumberValue(cleanValStr);
+    const realFloatValue = this._getRealNumberValue(cleanValStr);
     if (realFloatValue !== this.value) {
       // update value only if needed
       this.set('value', realFloatValue);
@@ -319,7 +319,7 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
   }
 
   _updateElementInternalValue(value, ironInput, cursorPos) {
-    let currencyInput = this.$.currencyInput;
+    const currencyInput = this.$.currencyInput;
     currencyInput.updateValueAndPreserveCaret(value);
 
     try {
@@ -339,13 +339,13 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
   _applyCurrencyAmountFormat(value) {
     value = this._getStrValue(value);
     let formattedValue = '';
-    let _valueParts = value.split('.');
+    const _valueParts = value.split('.');
     /**
      * _valueParts[0] - integer part
      * _valueParts[1] - decimals, if any
      */
     if (_valueParts[0] !== '') {
-      let decimalsPart = _valueParts[1];
+      const decimalsPart = _valueParts[1];
       formattedValue = this.addCurrencyAmountDelimiter(_valueParts[0]);
 
       if (!this._emptyValue(decimalsPart)) {
@@ -364,7 +364,7 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
     }
     let _values = value.split('.');
     let _decimals = '';
-    let _floatingPoints = _values.length - 1;
+    const _floatingPoints = _values.length - 1;
     if (_floatingPoints === 1) {
       _decimals = _values[_values.length - 1];
       _values = _values.slice(0, _values.length - 1);
@@ -396,7 +396,7 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
       return null;
     }
     value = this._getValueWithoutFormat(value, 2);
-    let floatVal = parseFloat(value);
+    const floatVal = parseFloat(value);
     if (isNaN(floatVal)) {
       return null;
     }
@@ -414,8 +414,8 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
     }
     if (e.which === 190) {
       // do not allow more then one period char ('.')
-      let currentInternalValue = this._internalValue ? this._internalValue.toString() : '';
-      let floatingPtsNr = currentInternalValue.split('.').length - 1;
+      const currentInternalValue = this._internalValue ? this._internalValue.toString() : '';
+      const floatingPtsNr = currentInternalValue.split('.').length - 1;
       if (floatingPtsNr === 1) {
         // stop, we already have a period
         e.preventDefault();
@@ -430,7 +430,7 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
       if (this._internalValue.substr(-1) === '.') {
         this.set('_internalValue', this._internalValue + '00');
       }
-      let _floatingPointPos = this._internalValue.indexOf('.');
+      const _floatingPointPos = this._internalValue.indexOf('.');
       if (_floatingPointPos === -1) {
         this.set('_internalValue', this._internalValue + '.00');
       } else {
