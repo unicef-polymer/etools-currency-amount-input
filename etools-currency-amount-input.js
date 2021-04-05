@@ -50,7 +50,7 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
 
       <paper-input id="currencyInput" label="[[label]]" value="{{_internalValue}}" allowed-pattern="[0-9\\.\\,]"
                    placeholder="[[placeholder]]" disabled\$="[[disabled]]" on-keydown="_onKeyDown" on-blur="_onBlur"
-                   readonly\$="[[readonly]]" required\$="[[required]]" invalid="{{invalid}}"
+                   readonly\$="[[readonly]]" required\$="[[required]]" invalid="{{invalid}}" on-focus="_onFocus"
                    auto-validate\$="[[_computeAutovalidate(autoValidate, readonly)]]" error-message="[[errorMessage]]"
                    no-label-float="[[noLabelFloat]]">
         <div slot="prefix" class="prefix" hidden\$="[[!currency]]">[[currency]]</div>
@@ -443,6 +443,10 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
         this.set('_internalValue', '0' + this._internalValue);
       }
     }
+  }
+
+  _onFocus(e) {
+    e.target.$.nativeInput.select();
   }
 }
 
