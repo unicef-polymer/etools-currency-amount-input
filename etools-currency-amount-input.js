@@ -199,9 +199,6 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
       return;
     }
 
-    // get internal iron-input and ensure _internalValue is string
-    const ironInput = this._getInputElement();
-
     value = this._getStrValue(value);
     oldValue = this._getStrValue(oldValue);
 
@@ -287,46 +284,32 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
   }
 
   _getCaretPosition (oField) {
-    if(!oField) {
+    if (!oField) {
       return -1;
     }
-    // Initialize
     let iCaretPos = 0;
-
-    // IE Support
-    if (document.selection) {
-
-      // Set focus on the element
-      oField.focus();
-
-      // To get cursor position, get empty selection range
-      const oSel = document.selection.createRange();
-
-      // Move selection start to 0 position
-      oSel.moveStart('character', -oField.value.length);
-
-      // The caret position is selection length
-      iCaretPos = oSel.text.length;
-    }
-
-    // Firefox support
-    else if (oField.selectionStart || oField.selectionStart == '0')
+     if (oField.selectionStart || oField.selectionStart == '0') {
       iCaretPos = oField.selectionDirection=='backward' ? oField.selectionStart : oField.selectionEnd;
-
-    // Return results
+    }
     return iCaretPos;
   }
 
   _getUpdatedCursorPosition(value, oldValue, cursorPos) {
-    let diff = (value || '').length - (oldValue || '').length;
-    if(diff > 1 && cursorPos > 1) {
-      diff--;
-    } else if (diff < -1) {
-      diff++;
-    } else {
-      diff = 0;
+    const valueLength = (value || '').length;
+    const oldValueLength = (oldValue || '').length;
+
+    let diff =  valueLength - oldValueLength;
+    const numberAddedWithDelimiter = diff > 1;
+    const numberRemovedWithDelimiter = diff < -1;
+    const cursorIsNotFirst = cursorPos > 1;
+    const cursorIsNotLast = cursorPos < oldValueLength;
+
+    if(numberAddedWithDelimiter && cursorIsNotFirst) {
+      cursorPos++;
+    } else if (numberRemovedWithDelimiter && cursorIsNotLast) {
+      cursorPos--;
     }
-    return cursorPos + diff;
+    return cursorPos;
   }
 
   _updateElementInternalValue(value, oldValue) {
@@ -338,7 +321,7 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
 
     try {
       if (inputElement && cursorPos >= 0) {
-        cursorPos = this._getUpdatedCursorPosition(value, oldValue, cursorPos)
+        cursorPos = this._getUpdatedCursorPosition(value, oldValue, cursorPos);
         inputElement.selectionStart = cursorPos;
         inputElement.selectionEnd = cursorPos;
       }
