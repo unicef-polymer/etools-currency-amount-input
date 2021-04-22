@@ -172,7 +172,7 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
     }
   }
 
-  _restoreDamagedInternalValue(value, ironInput, currentCursorPossition) {
+  _restoreDamagedInternalValue(value, oldValue) {
     // search for wrong delimiters and repair value's format
     const formattedValue = this._formatValue(value);
     const currentValCurrencyDelimitersNr = value.split(',').length;
@@ -183,18 +183,8 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
       return;
     }
 
-    if (currentValCurrencyDelimitersNr > formattedValCurrencyDelimitersNr) {
-      // wrong delimiters added, keep prev cursor position as wrong delimiters is deleted
-      currentCursorPossition--;
-    } else {
-      if (this._currentKeyPressed === 'delete') {
-        // delete was used to delete a delimiter, jump to the next number
-        currentCursorPossition++;
-      }
-    }
-
     // restore value and update cursor position
-    this._updateElementInternalValue(formattedValue, ironInput, currentCursorPossition);
+    this._updateElementInternalValue(formattedValue, oldValue);
   }
 
   _getInputElement() {
@@ -209,14 +199,11 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
       return;
     }
 
-    // get internal iron-input and ensure _internalValue is string
-    const ironInput = this._getInputElement();
-
     value = this._getStrValue(value);
     oldValue = this._getStrValue(oldValue);
 
     if (value.substr(0, 1) === '0' && value.substr(1, 1) !== '.' && value.length > 1) {
-      this._updateElementInternalValue(oldValue, ironInput, 0);
+      this._updateElementInternalValue(oldValue, value);
       return;
     }
 
@@ -225,14 +212,11 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
       return;
     }
 
-    // get cursor current position
-    const currentCursorPossition = ironInput.selectionStart;
-
     // floating point/period can be added just one and only at the end of the string
     const floatingPointPos = value.indexOf('.');
     if (floatingPointPos > -1 && (floatingPointPos + 1) < value.length - (oldValue.indexOf('.') > -1 ? 4 : 3)) {
       // floating point can be added only at the end of the string, starting with the last 2 digits
-      this._updateElementInternalValue(value.replace('.', ''), ironInput, currentCursorPossition - 1);
+      this._updateElementInternalValue(value.replace('.', ''), oldValue);
       return;
     }
 
@@ -243,11 +227,9 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
 
     if (this._getValueWithoutFormat(value) === this._getValueWithoutFormat(oldValue) && !preserveFloatingPoint) {
       // restore damaged internal value
-      this._restoreDamagedInternalValue(value, ironInput, currentCursorPossition);
+      this._restoreDamagedInternalValue(value, oldValue);
       return;
     }
-
-    const charsAfterCursor = value.substr(currentCursorPossition).length;
 
     if (value.substring(0, 1) === '.') {
       // no integer value, only floating point and decimals
@@ -260,25 +242,8 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
       }
     }
 
-    // update cursor position
-    const updatedCursorPossition = this._getUpdatedCursorPosition(value, charsAfterCursor, oldValue);
-
-    this._updateElementInternalValue(value, ironInput, updatedCursorPossition);
+    this._updateElementInternalValue(value, oldValue);
     this._setExternalValue(value, preserveFloatingPoint);
-  }
-
-  _getUpdatedCursorPosition(value, charsAfterCursor, oldValue) {
-    let updatedCursorPossition = value.length - charsAfterCursor;
-    const floatingPointPos = value.indexOf('.');
-    if (floatingPointPos > -1) {
-      // check cursor pos relative to floating point, only if floating point is not new
-      const newFloatingPoint = oldValue.indexOf('.') === -1;
-      if (updatedCursorPossition >= floatingPointPos + 1 && !newFloatingPoint) {
-        updatedCursorPossition++;
-      }
-    }
-    updatedCursorPossition = (updatedCursorPossition < 0) ? 0 : updatedCursorPossition;
-    return updatedCursorPossition;
   }
 
   /**
@@ -318,19 +283,50 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
     return value.trim();
   }
 
-  _updateElementInternalValue(value, ironInput, cursorPos) {
+  _getCaretPosition (oField) {
+    if (!oField) {
+      return -1;
+    }
+    let iCaretPos = 0;
+     if (oField.selectionStart || oField.selectionStart == '0') {
+      iCaretPos = oField.selectionDirection=='backward' ? oField.selectionStart : oField.selectionEnd;
+    }
+    return iCaretPos;
+  }
+
+  _getUpdatedCursorPosition(value, oldValue, cursorPos) {
+    const valueLength = (value || '').length;
+    const oldValueLength = (oldValue || '').length;
+
+    let diff =  valueLength - oldValueLength;
+    const numberAddedWithDelimiter = diff > 1;
+    const numberRemovedWithDelimiter = diff < -1;
+    const cursorIsNotFirst = cursorPos > 1;
+    const cursorIsNotLast = cursorPos < oldValueLength;
+
+    if(numberAddedWithDelimiter && cursorIsNotFirst) {
+      cursorPos++;
+    } else if (numberRemovedWithDelimiter && cursorIsNotLast) {
+      cursorPos--;
+    }
+    return cursorPos;
+  }
+
+  _updateElementInternalValue(value, oldValue) {
     const currencyInput = this.$.currencyInput;
+    const inputElement = currencyInput.$.nativeInput;
+    let cursorPos = this._getCaretPosition(inputElement);
+
     currencyInput.updateValueAndPreserveCaret(value);
 
     try {
-      // "Not all elements might have selection, and even if they have the
-      // right properties, accessing them might throw an exception"(PaperInputBehavior)
-      ironInput.selectionStart = cursorPos;
-      ironInput.selectionEnd = cursorPos;
-    } catch (err) {
-      // IE11 throws unspecified error when setting selectionStart and selectionEnd
-      // no need to log this error, IE11
-    }
+      if (inputElement && cursorPos >= 0) {
+        cursorPos = this._getUpdatedCursorPosition(value, oldValue, cursorPos);
+        inputElement.selectionStart = cursorPos;
+        inputElement.selectionEnd = cursorPos;
+      }
+    } catch (err) {}
+
     if (!this.readonly && this.autoValidate) {
       currencyInput._handleAutoValidate();
     }
