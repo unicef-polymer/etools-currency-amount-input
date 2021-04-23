@@ -302,7 +302,7 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
     const numberAddedWithDelimiter = diff > 1;
     const numberRemovedWithDelimiter = diff < -1;
     const cursorIsNotFirst = cursorPos > 1;
-    const cursorIsNotLast = cursorPos < oldValueLength;
+    const cursorIsNotLast = cursorPos < valueLength;
 
     if(numberAddedWithDelimiter && cursorIsNotFirst) {
       cursorPos++;
