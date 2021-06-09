@@ -115,6 +115,10 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
       _charsLimit: {
         type: Number,
         value: 12
+      },
+      fractionalDigits: {
+        type: Number,
+        value: 2
       }
     };
   }
@@ -159,13 +163,13 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
     if (currentValue === null || typeof currentValue === 'undefined') {
       this.set('_internalValue', null);
     }
-    currentValue = parseFloat(this._getValueWithoutFormat(value, 2, true)).toFixed(2);
+    currentValue = parseFloat(this._getValueWithoutFormat(value, this.fractionalDigits, true)).toFixed(this.fractionalDigits);
     if (isNaN(currentValue)) {
       currentValue = null;
     }
     let internalVal = this._internalValue;
     if (internalVal) {
-      internalVal = parseFloat(this._getValueWithoutFormat(this._internalValue, 2, true)).toFixed(2);
+      internalVal = parseFloat(this._getValueWithoutFormat(this._internalValue, this.fractionalDigits, true)).toFixed(this.fractionalDigits);
     }
     if (currentValue !== internalVal) {
       this.set('_internalValue', currentValue);
@@ -250,7 +254,7 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
    * Update element value with the float value of _internalValue
    */
   _setExternalValue(value, preserveFloatingPoint) {
-    let cleanValStr = this._getValueWithoutFormat(value, 2);
+    let cleanValStr = this._getValueWithoutFormat(value, this.fractionalDigits);
     const valuePieces = cleanValStr.split('.');
     let limitExceeded = false;
     if (valuePieces[0].length > this._charsLimit) {
@@ -277,19 +281,19 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
   }
 
   _formatValue(value) {
-    value = this._getValueWithoutFormat(value, 2);
+    value = this._getValueWithoutFormat(value, this.fractionalDigits);
     // re-apply format
     value = this._applyCurrencyAmountFormat(value);
     return value.trim();
   }
 
-  _getCaretPosition (oField) {
+  _getCaretPosition(oField) {
     if (!oField) {
       return -1;
     }
     let iCaretPos = 0;
-     if (oField.selectionStart || oField.selectionStart == '0') {
-      iCaretPos = oField.selectionDirection=='backward' ? oField.selectionStart : oField.selectionEnd;
+    if (oField.selectionStart || oField.selectionStart == '0') {
+      iCaretPos = oField.selectionDirection == 'backward' ? oField.selectionStart : oField.selectionEnd;
     }
     return iCaretPos;
   }
@@ -298,13 +302,13 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
     const valueLength = (value || '').length;
     const oldValueLength = (oldValue || '').length;
 
-    let diff =  valueLength - oldValueLength;
+    let diff = valueLength - oldValueLength;
     const numberAddedWithDelimiter = diff > 1;
     const numberRemovedWithDelimiter = diff < -1;
     const cursorIsNotFirst = cursorPos > 1;
     const cursorIsNotLast = cursorPos < valueLength;
 
-    if(numberAddedWithDelimiter && cursorIsNotFirst) {
+    if (numberAddedWithDelimiter && cursorIsNotFirst) {
       cursorPos++;
     } else if (numberRemovedWithDelimiter && cursorIsNotLast) {
       cursorPos--;
@@ -325,7 +329,7 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
         inputElement.selectionStart = cursorPos;
         inputElement.selectionEnd = cursorPos;
       }
-    } catch (err) {}
+    } catch (err) { }
 
     if (!this.readonly && this.autoValidate) {
       currencyInput._handleAutoValidate();
@@ -391,7 +395,7 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
     if (this._emptyValue(value)) {
       return null;
     }
-    value = this._getValueWithoutFormat(value, 2);
+    value = this._getValueWithoutFormat(value, this.fractionalDigits);
     const floatVal = parseFloat(value);
     if (isNaN(floatVal)) {
       return null;
