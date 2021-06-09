@@ -116,7 +116,7 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
         type: Number,
         value: 12
       },
-      decimalDigits: {
+      noOfDecimals: {
         type: Number,
         value: 2
       }
@@ -163,13 +163,13 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
     if (currentValue === null || typeof currentValue === 'undefined') {
       this.set('_internalValue', null);
     }
-    currentValue = parseFloat(this._getValueWithoutFormat(value, this.decimalDigits, true)).toFixed(this.decimalDigits);
+    currentValue = parseFloat(this._getValueWithoutFormat(value, this.noOfDecimals, true)).toFixed(this.noOfDecimals);
     if (isNaN(currentValue)) {
       currentValue = null;
     }
     let internalVal = this._internalValue;
     if (internalVal) {
-      internalVal = parseFloat(this._getValueWithoutFormat(this._internalValue, this.decimalDigits, true)).toFixed(this.decimalDigits);
+      internalVal = parseFloat(this._getValueWithoutFormat(this._internalValue, this.noOfDecimals, true)).toFixed(this.noOfDecimals);
     }
     if (currentValue !== internalVal) {
       this.set('_internalValue', currentValue);
@@ -254,7 +254,7 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
    * Update element value with the float value of _internalValue
    */
   _setExternalValue(value, preserveFloatingPoint) {
-    let cleanValStr = this._getValueWithoutFormat(value, this.decimalDigits);
+    let cleanValStr = this._getValueWithoutFormat(value, this.noOfDecimals);
     const valuePieces = cleanValStr.split('.');
     let limitExceeded = false;
     if (valuePieces[0].length > this._charsLimit) {
@@ -281,7 +281,7 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
   }
 
   _formatValue(value) {
-    value = this._getValueWithoutFormat(value, this.decimalDigits);
+    value = this._getValueWithoutFormat(value, this.noOfDecimals);
     // re-apply format
     value = this._applyCurrencyAmountFormat(value);
     return value.trim();
@@ -395,7 +395,7 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
     if (this._emptyValue(value)) {
       return null;
     }
-    value = this._getValueWithoutFormat(value, this.decimalDigits);
+    value = this._getValueWithoutFormat(value, this.noOfDecimals);
     const floatVal = parseFloat(value);
     if (isNaN(floatVal)) {
       return null;
