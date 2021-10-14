@@ -169,7 +169,8 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
     }
     let internalVal = this._internalValue;
     if (internalVal) {
-      internalVal = parseFloat(this._getValueWithoutFormat(this._internalValue, this.noOfDecimals, true)).toFixed(this.noOfDecimals);
+      internalVal = parseFloat(this._getValueWithoutFormat(this._internalValue, this.noOfDecimals, true))
+          .toFixed(this.noOfDecimals);
     }
     if (currentValue !== internalVal) {
       this.set('_internalValue', currentValue);
@@ -302,7 +303,7 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
     const valueLength = (value || '').length;
     const oldValueLength = (oldValue || '').length;
 
-    let diff = valueLength - oldValueLength;
+    const diff = valueLength - oldValueLength;
     const numberAddedWithDelimiter = diff > 1;
     const numberRemovedWithDelimiter = diff < -1;
     const cursorIsNotFirst = cursorPos > 1;
@@ -329,7 +330,9 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
         inputElement.selectionStart = cursorPos;
         inputElement.selectionEnd = cursorPos;
       }
-    } catch (err) { }
+    } catch (err) {
+      console.log(err);
+    }
 
     if (!this.readonly && this.autoValidate) {
       currencyInput._handleAutoValidate();
