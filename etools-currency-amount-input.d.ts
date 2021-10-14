@@ -52,6 +52,7 @@ declare class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
   currency: string|null|undefined;
   _currentKeyPressed: string|null|undefined;
   _charsLimit: number|null|undefined;
+  noOfDecimals: number;
   _updateStyles(readonly: any, disabled: any, invalid: any): void;
   _computeAutovalidate(autoValidate: any, readonly: any): any;
   validate(): any;
