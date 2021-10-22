@@ -3,13 +3,15 @@
 
 <dom-module id="demo-helper">
   <template>
-    <etools-currency-amount-input label="UNICEF Supply (USD)"
-                                  value="{{dataSetModel.in_kind_amount}}"
-                                  placeholder="&#8212;"
-                                  readonly$="[[!editMode]]"
-                                  required$="[[required]]"
-                                  auto-validate
-                                  error-message="UNICEF Supply (USD) required">
+    <etools-currency-amount-input
+      label="UNICEF Supply (USD)"
+      value="{{dataSetModel.in_kind_amount}}"
+      placeholder="&#8212;"
+      readonly$="[[!editMode]]"
+      required$="[[required]]"
+      auto-validate
+      error-message="UNICEF Supply (USD) required"
+    >
     </etools-currency-amount-input>
   </template>
   <script type="module">
@@ -42,11 +44,14 @@
         }
       },
 
-      ready: function() {
-        this.set('inputValue', 123);
-        setTimeout(function() {
-          //this.set('inputValue', 13876533.5678);
-        }.bind(this), 7000);
+      ready: function () {
+        this.inputValue = 123;
+        setTimeout(
+          function () {
+            //this.set('inputValue', 13876533.5678);
+          }.bind(this),
+          7000
+        );
 
         this.dataSetModel = {
           id: null,
@@ -62,12 +67,11 @@
         };
       },
 
-      _editModeChanged: function(newValue, oldValue) {
+      _editModeChanged: function (newValue, oldValue) {
         if (newValue !== oldValue) {
           this.updateStyles();
         }
       }
-
     });
   </script>
 </dom-module>

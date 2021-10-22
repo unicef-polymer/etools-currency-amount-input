@@ -1,4 +1,4 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import {LitElement, html} from 'lit-element';
 import '@polymer/paper-input/paper-input.js';
 import {EtoolsCurrency} from './mixins/etools-currency-mixin.js';
 
@@ -28,8 +28,8 @@ import {EtoolsCurrency} from './mixins/etools-currency-mixin.js';
  * @appliesMixin EtoolsCurrency
  * @demo demo/index.html
  */
-class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
-  static get template() {
+class EtoolsCurrencyAmountInput extends EtoolsCurrency(LitElement) {
+  render() {
     // language=HTML
     return html`
       <style>
@@ -44,16 +44,29 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
 
           --paper-input-prefix: {
             margin-right: 5px;
-          };
+          }
         }
       </style>
 
-      <paper-input id="currencyInput" label="[[label]]" value="{{_internalValue}}" allowed-pattern="[0-9\\.\\,]"
-                   placeholder="[[placeholder]]" disabled\$="[[disabled]]" on-keydown="_onKeyDown" on-blur="_onBlur"
-                   readonly\$="[[readonly]]" required\$="[[required]]" invalid="{{invalid}}" on-focus="_onFocus"
-                   auto-validate\$="[[_computeAutovalidate(autoValidate, readonly)]]" error-message="[[errorMessage]]"
-                   no-label-float="[[noLabelFloat]]">
-        <div slot="prefix" class="prefix" hidden\$="[[!currency]]">[[currency]]</div>
+      <paper-input
+        id="currencyInput"
+        label="${this.label}"
+        .value="${this._internalValue}"
+        @value-changed="${(e) => this._onInternalValueChange(e.detail.value)}"
+        allowed-pattern="[0-9\\.\\,]"
+        placeholder="${this.placeholder}"
+        ?disabled="${this.disabled}"
+        @keydown="${this._onKeyDown}"
+        @blur="${this._onBlur}"
+        ?readonly="${this.readonly}"
+        ?required="${this.required}"
+        ?invalid="${this.invalid}"
+        @focus="${this._onFocus}"
+        ?autoValidate="${this._computeAutovalidate(this.autoValidate, this.readonly)}"
+        .errorMessage="${this.errorMessage}"
+        ?noLabelFsloat="${this.noLabelFloat}"
+      >
+        <div slot="prefix" class="prefix" ?hidden="${!this.currency}">${this.currency}</div>
       </paper-input>
     `;
   }
@@ -67,76 +80,85 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
       label: String,
       noLabelFloat: Boolean,
       _internalValue: {
-        type: String,
-        notify: true,
-        observer: '_onInternalValueChange'
+        type: String
       },
       value: {
-        value: null,
-        notify: true,
-        observer: '_onValueChange'
+        type: String
       },
       placeholder: {
-        type: String,
-        value: '—'
+        type: String
       },
       readonly: {
         type: Boolean,
-        value: false,
-        reflectToAttribute: true
+        reflect: true
       },
       disabled: {
         type: Boolean,
-        value: false,
-        reflectToAttribute: true
+        reflect: true
       },
       required: {
         type: Boolean,
-        value: false,
-        reflectToAttribute: true
+        reflect: true
       },
       autoValidate: {
         type: Boolean,
-        value: false,
-        reflectToAttribute: true
+        reflect: true,
+        attribute: 'auto-validate'
       },
       invalid: {
         type: Boolean,
-        value: false,
-        notify: true,
-        reflectToAttribute: true
+        reflect: true
       },
       errorMessage: {
-        type: String,
-        value: 'This field is required'
+        type: String
       },
       currency: String,
       _currentKeyPressed: String,
       _charsLimit: {
-        type: Number,
-        value: 12
+        type: Number
       },
       noOfDecimals: {
-        type: Number,
-        value: 2
+        type: Number
       }
     };
   }
 
-  static get observers() {
-    return [
-      '_updateStyles(readonly, disabled, invalid)'
-    ];
+  set value(val) {
+    this._value = val;
+    this._onValueChange(val);
   }
 
-  _updateStyles(readonly, disabled, invalid) {
-    if (readonly === undefined && disabled === undefined && invalid === undefined) {
+  get value() {
+    return this._value;
+  }
+
+  set readonly(val) {
+    this._readonly = val;
+    if (this._readonly) {
+      this.invalid = false;
+    }
+  }
+
+  constructor() {
+    super();
+    this._value = null;
+    this._charsLimit = 12;
+    this.placeholder = '—';
+    this.autoValidate = false;
+    this.noOfDecimals = 2;
+    this.invalid = false;
+    this.required = false;
+    this.disabled = false;
+    this._readonly = false;
+    this.errorMessage = 'This field is required';
+  }
+
+  valueChanged(detail, key) {
+    if (areEqual(this.data[key], detail.value)) {
       return;
     }
-    if (readonly) {
-      this.set('invalid', false);
-    }
-    this.updateStyles();
+    this.data[key] = detail.value;
+    this.requestUpdate();
   }
 
   _computeAutovalidate(autoValidate, readonly) {
@@ -144,12 +166,12 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
   }
 
   validate() {
-    return this.$.currencyInput.validate();
+    return this.shadowRoot.querySelector('#currencyInput').validate();
   }
 
   _getStrValue(value) {
     try {
-      return (value === 0) ? '0' : value.toString();
+      return value === 0 ? '0' : value.toString();
     } catch (error) {
       return '0';
     }
@@ -161,7 +183,7 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
     }
     let currentValue = value;
     if (currentValue === null || typeof currentValue === 'undefined') {
-      this.set('_internalValue', null);
+      this._internalValue = null;
     }
     currentValue = parseFloat(this._getValueWithoutFormat(value, this.noOfDecimals, true)).toFixed(this.noOfDecimals);
     if (isNaN(currentValue)) {
@@ -169,11 +191,12 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
     }
     let internalVal = this._internalValue;
     if (internalVal) {
-      internalVal = parseFloat(this._getValueWithoutFormat(this._internalValue, this.noOfDecimals, true))
-          .toFixed(this.noOfDecimals);
+      internalVal = parseFloat(this._getValueWithoutFormat(this._internalValue, this.noOfDecimals, true)).toFixed(
+        this.noOfDecimals
+      );
     }
     if (currentValue !== internalVal) {
-      this.set('_internalValue', currentValue);
+      this._internalValue = currentValue;
     }
   }
 
@@ -193,19 +216,23 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
   }
 
   _getInputElement() {
-    return this.$.currencyInput.inputElement;
+    return this.shadowRoot.querySelector('#currencyInput').inputElement;
   }
 
   /**
    * Internal value changed, needs to be checked and changed to US currency format
    */
-  _onInternalValueChange(value, oldValue) {
+  _onInternalValueChange(value) {
     if (typeof value === 'undefined' || value === null) {
       return;
     }
 
     value = this._getStrValue(value);
-    oldValue = this._getStrValue(oldValue);
+    let oldValue = this._getStrValue(this._internalValue);
+
+    if (value === oldValue) {
+      return;
+    }
 
     if (value.substr(0, 1) === '0' && value.substr(1, 1) !== '.' && value.length > 1) {
       this._updateElementInternalValue(oldValue, value);
@@ -213,13 +240,13 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
     }
 
     if (value === '.') {
-      this.set('_internalValue', null);
+      this._internalValue = null;
       return;
     }
 
     // floating point/period can be added just one and only at the end of the string
     const floatingPointPos = value.indexOf('.');
-    if (floatingPointPos > -1 && (floatingPointPos + 1) < value.length - (oldValue.indexOf('.') > -1 ? 4 : 3)) {
+    if (floatingPointPos > -1 && floatingPointPos + 1 < value.length - (oldValue.indexOf('.') > -1 ? 4 : 3)) {
       // floating point can be added only at the end of the string, starting with the last 2 digits
       this._updateElementInternalValue(value.replace('.', ''), oldValue);
       return;
@@ -268,16 +295,16 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
       cleanValStr += '.';
     }
     if (limitExceeded) {
-      this.set('_internalValue', this.addCurrencyAmountDelimiter(cleanValStr));
+      this._internalValue = this.addCurrencyAmountDelimiter(cleanValStr);
       return;
     }
     const realFloatValue = this._getRealNumberValue(cleanValStr);
     if (realFloatValue !== this.value) {
       // update value only if needed
-      this.set('value', realFloatValue);
+      this.value = realFloatValue;
     } else {
       // update internal value
-      this.set('_internalValue', this.addCurrencyAmountDelimiter(cleanValStr));
+      this._internalValue = this.addCurrencyAmountDelimiter(cleanValStr);
     }
   }
 
@@ -318,8 +345,8 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
   }
 
   _updateElementInternalValue(value, oldValue) {
-    const currencyInput = this.$.currencyInput;
-    const inputElement = currencyInput.$.nativeInput;
+    const currencyInput = this.shadowRoot.querySelector('#currencyInput');
+    const inputElement = currencyInput.shadowRoot.querySelector('input');
     let cursorPos = this._getCaretPosition(inputElement);
 
     currencyInput.updateValueAndPreserveCaret(value);
@@ -388,7 +415,7 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
       return true;
     }
     value = value.toString();
-    return (value === '') ? true : false;
+    return value === '' ? true : false;
   }
 
   _getRealNumberValue(value, decimals) {
@@ -424,32 +451,32 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
         e.preventDefault();
       }
     }
-    this.set('_currentKeyPressed', currentKey);
+    this._currentKeyPressed = currentKey;
   }
 
   _onBlur(e) {
     if (this._internalValue) {
       // adjust decimals on focus lost
       if (this._internalValue.substr(-1) === '.') {
-        this.set('_internalValue', this._internalValue + '00');
+        this._internalValue = this._internalValue + '00';
       }
       const _floatingPointPos = this._internalValue.indexOf('.');
       if (_floatingPointPos === -1) {
-        this.set('_internalValue', this._internalValue + '.00');
+        this._internalValue = this._internalValue + '.00';
       } else {
         if (this._internalValue.slice(_floatingPointPos + 1).length == 1) {
           // add second missing decimal
-          this.set('_internalValue', this._internalValue + '0');
+          this._internalValue = this._internalValue + '0';
         }
       }
       if (this._internalValue.substr(0, 1) === '.') {
-        this.set('_internalValue', '0' + this._internalValue);
+        this._internalValue = '0' + this._internalValue;
       }
     }
   }
 
   _onFocus(e) {
-    e.target.$.nativeInput.select();
+    e.target.shadowRoot.querySelector('input').select();
   }
 }
 
