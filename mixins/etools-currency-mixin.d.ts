@@ -17,4 +17,4 @@ declare function EtoolsCurrency<T extends Constructor<PolymerElement | LitElemen
             addCurrencyAmountDelimiter(value: any): any;
             displayCurrencyAmount(value: any, placeholder?: any, noOfDecimals?: any): any;
         }
-    } & T & Constructor<PolymerElement | LitElement>;
+    } & T;
