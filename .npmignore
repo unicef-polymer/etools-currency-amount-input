@@ -1,0 +1,11 @@
+bower_components/
+node_modules/
+.idea/
+npm-debug.log
+demo/
+.circleci/
+test/
+.eslintingore
+.eslintrc.json
+.prettierrc
+analysis.json 
