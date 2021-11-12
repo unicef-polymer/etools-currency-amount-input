@@ -153,14 +153,6 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(LitElement) {
     this.errorMessage = 'This field is required';
   }
 
-  valueChanged(detail, key) {
-    if (areEqual(this.data[key], detail.value)) {
-      return;
-    }
-    this.data[key] = detail.value;
-    this.requestUpdate();
-  }
-
   _computeAutovalidate(autoValidate, readonly) {
     return readonly ? false : autoValidate;
   }
@@ -228,7 +220,7 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(LitElement) {
     }
 
     value = this._getStrValue(value);
-    let oldValue = this._getStrValue(this._internalValue);
+    const oldValue = this._getStrValue(this._internalValue);
 
     if (value === oldValue) {
       return;
@@ -385,6 +377,7 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(LitElement) {
     return formattedValue;
   }
 
+  // Get number without ',' and with the set number of decimals
   _getValueWithoutFormat(value, decimalsNr, needsStrValue) {
     if (!decimalsNr) {
       decimalsNr = 0;

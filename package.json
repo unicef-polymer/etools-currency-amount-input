@@ -9,7 +9,7 @@
   },
   "main": "etools-currency-amount-input.js",
   "module": "etools-currency-amount-input.js",
-  "license": "https://github.com/unicef-polymer/etools-currency-amount-input/blob/master/LICENSE.md",
+  "license": "Apache-2.0",
   "scripts": {
     "lint": "eslint . --ext js,html",
     "publish": "git push --tags && npm publish",
