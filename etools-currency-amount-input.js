@@ -236,6 +236,14 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
       return;
     }
 
+    const valueWithoutDelimiter = value.replace(/,/g, '');
+    const zeroValue = String(parseFloat(0).toFixed(this.noOfDecimals));
+    // prevent having invalid numbers like 000,000.00, if number have only 0s, set value to 0.00
+    if (!+valueWithoutDelimiter && valueWithoutDelimiter.length > zeroValue.length) {
+      this._updateElementInternalValue(zeroValue, value);
+      return;
+    }
+
     if (value.substring(0, 1) === '.') {
       // no integer value, only floating point and decimals
       value = value.substring(0, 3);
