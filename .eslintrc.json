@@ -1,31 +1,60 @@
 {
-  "extends": ["eslint:recommended", "google"],
+  "extends": [
+    "eslint:recommended",
+    "google",
+    "plugin:prettier/recommended"
+    // Enables eslint-plugin-prettier and eslint-config-prettier.
+  ],
   "parserOptions": {
-    "ecmaVersion": 6,
+    "ecmaVersion": 8,
     "sourceType": "module"
   },
   "env": {
-    "browser": true
+    "browser": true,
+    "es6": true,
+    "node": true
   },
-  "plugins": [
-    "html"
-  ],
+  "plugins": ["html", "prettier"],
   "rules": {
     "padded-blocks": "off",
     "linebreak-style": "off",
     "brace-style": "off",
-    "new-cap": ["error", { "capIsNewExceptions": ["Polymer"], "capIsNewExceptionPattern": "^Etools.." }],
+    "new-cap": "off",
     "no-var": "off",
     "require-jsdoc": "off",
     "valid-jsdoc": "off",
     "comma-dangle": ["error", "never"],
-    "max-len": ["error", { "code": 120 }],
-    "camelcase": ["error", {"properties": "never"}],
-    "arrow-parens": [2, "as-needed", { "requireForBlockBody": true }]
+    "no-irregular-whitespace": [
+      "error",
+      {
+        "skipTemplates": true
+      }
+    ],
+    "max-len": [
+      "error",
+      {
+        "code": 120
+      }
+    ],
+    "camelcase": [
+      "error",
+      {
+        "properties": "never"
+      }
+    ],
+    "arrow-parens": [
+      2,
+      "always",
+      {
+        "requireForBlockBody": true
+      }
+    ]
   },
   "globals": {
     "moment": true,
     "Promise": true,
-    "Polymer": true
+    "Polymer": true,
+    "EtoolsLogsMixin": true,
+    "EsmmMixins": true
   }
 }

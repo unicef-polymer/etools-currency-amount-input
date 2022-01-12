@@ -12,36 +12,35 @@ To only display values as currency amounts you can use `EtoolsCurrency` mixin,
 
 ### Element properties
 
-* autoValidate, Boolean, default: false
-* currency, string
-* disabled, Boolean, default: false
-* errorMessage, String, default: 'This field is required'
-* invalid, Boolean, default: false - notifies
-* label, String
-* placeholder, String, default: '—'
-* readonly, Boolean, default: false
-* required, Boolean, default: false
-* value, String, notifies, converted to float value on internal value change
+- autoValidate, Boolean, default: false
+- currency, string
+- disabled, Boolean, default: false
+- errorMessage, String, default: 'This field is required'
+- invalid, Boolean, default: false - notifies
+- label, String
+- placeholder, String, default: '—'
+- readonly, Boolean, default: false
+- required, Boolean, default: false
+- value, String, notifies, converted to float value on internal value change
 
 ## Usage
 
 ```html
-<etools-currency-amount-input label="Amount value"
-    value="{{value}}" currency="$"></etools-currency-amount-input>
+<etools-currency-amount-input label="Amount value" value="{{value}}" currency="$"></etools-currency-amount-input>
 ```
 
 ## Styling
 
 Use CSS properties and mixin of paper-input to style the element or:
 
-Custom property | Description | Default
-----------------|-------------|----------
-`--etools-currency-input` | Mixin applied to currency element | `{}`
+| Custom property           | Description                       | Default |
+| ------------------------- | --------------------------------- | ------- |
+| `--etools-currency-input` | Mixin applied to currency element | `{}`    |
 
 ## Install
-TODO: create npm package
+
 ```bash
-$ npm i --save unicef-polymer/etools-currency-amount-input#branch_name
+$ npm i --save @unicef-polymer/etools-currency-amount-input
 ```
 
 ## Linting the code
@@ -54,11 +53,21 @@ $ npm run lint
 ```
 
 ## Preview element locally
+
 Install needed dependencies by running: `$ npm install`.
+
+By default iron-component-page will look for a file called analysis.json. If the JSON descriptor file - analysis.json is not up-to-date, re-generate it using
+
+```bash
+polymer analyze > analysis.json
+```
+
+If the generated analysis.json is empty , try specifing the file or the entrypoint in polymer.json.
+
 Make sure you have the [Polymer CLI](https://www.npmjs.com/package/polymer-cli) installed. Then run `$ polymer serve` to serve your element application locally.
 
 ## Running Tests
-TODO: improve and add more tests
+
 ```
 $ polymer test
 ```

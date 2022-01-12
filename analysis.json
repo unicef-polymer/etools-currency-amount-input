@@ -7,17 +7,55 @@
       "path": "etools-currency-amount-input.js",
       "properties": [
         {
+          "name": "value",
+          "type": "string | null | undefined",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 130,
+              "column": 2
+            },
+            "end": {
+              "line": 132,
+              "column": 3
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "readonly",
+          "type": "boolean | null | undefined",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 134,
+              "column": 2
+            },
+            "end": {
+              "line": 139,
+              "column": 3
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
           "name": "label",
           "type": "string | null | undefined",
           "description": "",
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 66,
+              "line": 79,
               "column": 6
             },
             "end": {
-              "line": 66,
+              "line": 79,
               "column": 19
             }
           },
@@ -34,11 +72,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 67,
+              "line": 80,
               "column": 6
             },
             "end": {
-              "line": 67,
+              "line": 80,
               "column": 27
             }
           },
@@ -55,44 +93,19 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 68,
+              "line": 81,
               "column": 6
             },
             "end": {
-              "line": 72,
+              "line": 83,
               "column": 7
             }
           },
           "metadata": {
             "polymer": {
-              "notify": true,
-              "observer": "\"_onInternalValueChange\"",
               "attributeType": "String"
             }
           }
-        },
-        {
-          "name": "value",
-          "type": "?",
-          "description": "",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 73,
-              "column": 6
-            },
-            "end": {
-              "line": 77,
-              "column": 7
-            }
-          },
-          "metadata": {
-            "polymer": {
-              "notify": true,
-              "observer": "\"_onValueChange\""
-            }
-          },
-          "defaultValue": "null"
         },
         {
           "name": "placeholder",
@@ -101,11 +114,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 78,
+              "line": 87,
               "column": 6
             },
             "end": {
-              "line": 81,
+              "line": 89,
               "column": 7
             }
           },
@@ -113,30 +126,7 @@
             "polymer": {
               "attributeType": "String"
             }
-          },
-          "defaultValue": "\"—\""
-        },
-        {
-          "name": "readonly",
-          "type": "boolean | null | undefined",
-          "description": "",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 82,
-              "column": 6
-            },
-            "end": {
-              "line": 86,
-              "column": 7
-            }
-          },
-          "metadata": {
-            "polymer": {
-              "attributeType": "Boolean"
-            }
-          },
-          "defaultValue": "false"
+          }
         },
         {
           "name": "disabled",
@@ -145,11 +135,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 87,
+              "line": 94,
               "column": 6
             },
             "end": {
-              "line": 91,
+              "line": 97,
               "column": 7
             }
           },
@@ -157,8 +147,7 @@
             "polymer": {
               "attributeType": "Boolean"
             }
-          },
-          "defaultValue": "false"
+          }
         },
         {
           "name": "required",
@@ -167,29 +156,7 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 92,
-              "column": 6
-            },
-            "end": {
-              "line": 96,
-              "column": 7
-            }
-          },
-          "metadata": {
-            "polymer": {
-              "attributeType": "Boolean"
-            }
-          },
-          "defaultValue": "false"
-        },
-        {
-          "name": "autoValidate",
-          "type": "boolean | null | undefined",
-          "description": "",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 97,
+              "line": 98,
               "column": 6
             },
             "end": {
@@ -201,11 +168,10 @@
             "polymer": {
               "attributeType": "Boolean"
             }
-          },
-          "defaultValue": "false"
+          }
         },
         {
-          "name": "invalid",
+          "name": "autoValidate",
           "type": "boolean | null | undefined",
           "description": "",
           "privacy": "public",
@@ -215,17 +181,36 @@
               "column": 6
             },
             "end": {
-              "line": 107,
+              "line": 106,
               "column": 7
             }
           },
           "metadata": {
             "polymer": {
-              "notify": true,
               "attributeType": "Boolean"
             }
+          }
+        },
+        {
+          "name": "invalid",
+          "type": "boolean | null | undefined",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 107,
+              "column": 6
+            },
+            "end": {
+              "line": 110,
+              "column": 7
+            }
           },
-          "defaultValue": "false"
+          "metadata": {
+            "polymer": {
+              "attributeType": "Boolean"
+            }
+          }
         },
         {
           "name": "errorMessage",
@@ -234,11 +219,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 108,
+              "line": 111,
               "column": 6
             },
             "end": {
-              "line": 111,
+              "line": 113,
               "column": 7
             }
           },
@@ -246,8 +231,7 @@
             "polymer": {
               "attributeType": "String"
             }
-          },
-          "defaultValue": "\"This field is required\""
+          }
         },
         {
           "name": "currency",
@@ -256,11 +240,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 112,
+              "line": 114,
               "column": 6
             },
             "end": {
-              "line": 112,
+              "line": 114,
               "column": 22
             }
           },
@@ -277,11 +261,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 113,
+              "line": 115,
               "column": 6
             },
             "end": {
-              "line": 113,
+              "line": 115,
               "column": 32
             }
           },
@@ -298,11 +282,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 114,
+              "line": 116,
               "column": 6
             },
             "end": {
-              "line": 117,
+              "line": 118,
               "column": 7
             }
           },
@@ -310,8 +294,28 @@
             "polymer": {
               "attributeType": "Number"
             }
+          }
+        },
+        {
+          "name": "noOfDecimals",
+          "type": "number | null | undefined",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 119,
+              "column": 6
+            },
+            "end": {
+              "line": 121,
+              "column": 7
+            }
           },
-          "defaultValue": "12"
+          "metadata": {
+            "polymer": {
+              "attributeType": "Number"
+            }
+          }
         }
       ],
       "methods": [
@@ -322,11 +326,11 @@
           "sourceRange": {
             "file": "mixins/etools-currency-mixin.js",
             "start": {
-              "line": 11,
+              "line": 12,
               "column": 2
             },
             "end": {
-              "line": 20,
+              "line": 14,
               "column": 3
             }
           },
@@ -345,11 +349,11 @@
           "sourceRange": {
             "file": "mixins/etools-currency-mixin.js",
             "start": {
-              "line": 26,
+              "line": 20,
               "column": 2
             },
             "end": {
-              "line": 42,
+              "line": 22,
               "column": 3
             }
           },
@@ -368,29 +372,26 @@
           "inheritedFrom": "EtoolsCurrency"
         },
         {
-          "name": "_updateStyles",
+          "name": "valueChanged",
           "description": "",
-          "privacy": "protected",
+          "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 127,
+              "line": 155,
               "column": 2
             },
             "end": {
-              "line": 135,
+              "line": 161,
               "column": 3
             }
           },
           "metadata": {},
           "params": [
             {
-              "name": "readonly"
+              "name": "detail"
             },
             {
-              "name": "disabled"
-            },
-            {
-              "name": "invalid"
+              "name": "key"
             }
           ],
           "return": {
@@ -403,11 +404,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 137,
+              "line": 163,
               "column": 2
             },
             "end": {
-              "line": 139,
+              "line": 165,
               "column": 3
             }
           },
@@ -427,11 +428,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 141,
+              "line": 167,
               "column": 2
             },
             "end": {
-              "line": 143,
+              "line": 169,
               "column": 3
             }
           },
@@ -444,11 +445,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 145,
+              "line": 171,
               "column": 2
             },
             "end": {
-              "line": 151,
+              "line": 177,
               "column": 3
             }
           },
@@ -465,11 +466,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 153,
+              "line": 179,
               "column": 2
             },
             "end": {
-              "line": 172,
+              "line": 200,
               "column": 3
             }
           },
@@ -489,11 +490,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 174,
+              "line": 202,
               "column": 2
             },
             "end": {
-              "line": 197,
+              "line": 215,
               "column": 3
             }
           },
@@ -503,10 +504,7 @@
               "name": "value"
             },
             {
-              "name": "ironInput"
-            },
-            {
-              "name": "currentCursorPossition"
+              "name": "oldValue"
             }
           ],
           "return": {
@@ -519,11 +517,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 199,
+              "line": 217,
               "column": 2
             },
             "end": {
-              "line": 201,
+              "line": 219,
               "column": 3
             }
           },
@@ -536,11 +534,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 206,
+              "line": 224,
               "column": 2
             },
             "end": {
-              "line": 267,
+              "line": 278,
               "column": 3
             }
           },
@@ -548,9 +546,6 @@
           "params": [
             {
               "name": "value"
-            },
-            {
-              "name": "oldValue"
             }
           ],
           "return": {
@@ -558,43 +553,16 @@
           }
         },
         {
-          "name": "_getUpdatedCursorPosition",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 269,
-              "column": 2
-            },
-            "end": {
-              "line": 281,
-              "column": 3
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "value"
-            },
-            {
-              "name": "charsAfterCursor"
-            },
-            {
-              "name": "oldValue"
-            }
-          ]
-        },
-        {
           "name": "_setExternalValue",
           "description": "Update element value with the float value of _internalValue",
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 286,
+              "line": 283,
               "column": 2
             },
             "end": {
-              "line": 311,
+              "line": 308,
               "column": 3
             }
           },
@@ -617,11 +585,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 313,
+              "line": 310,
               "column": 2
             },
             "end": {
-              "line": 318,
+              "line": 315,
               "column": 3
             }
           },
@@ -633,16 +601,37 @@
           ]
         },
         {
-          "name": "_updateElementInternalValue",
+          "name": "_getCaretPosition",
           "description": "",
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 320,
+              "line": 317,
               "column": 2
             },
             "end": {
-              "line": 336,
+              "line": 326,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "oField"
+            }
+          ]
+        },
+        {
+          "name": "_getUpdatedCursorPosition",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 328,
+              "column": 2
+            },
+            "end": {
+              "line": 344,
               "column": 3
             }
           },
@@ -652,10 +641,34 @@
               "name": "value"
             },
             {
-              "name": "ironInput"
+              "name": "oldValue"
             },
             {
               "name": "cursorPos"
+            }
+          ]
+        },
+        {
+          "name": "_updateElementInternalValue",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 346,
+              "column": 2
+            },
+            "end": {
+              "line": 366,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "value"
+            },
+            {
+              "name": "oldValue"
             }
           ],
           "return": {
@@ -668,11 +681,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 338,
+              "line": 368,
               "column": 2
             },
             "end": {
-              "line": 355,
+              "line": 385,
               "column": 3
             }
           },
@@ -689,11 +702,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 357,
+              "line": 387,
               "column": 2
             },
             "end": {
-              "line": 380,
+              "line": 410,
               "column": 3
             }
           },
@@ -716,11 +729,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 382,
+              "line": 412,
               "column": 2
             },
             "end": {
-              "line": 388,
+              "line": 418,
               "column": 3
             }
           },
@@ -737,11 +750,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 390,
+              "line": 420,
               "column": 2
             },
             "end": {
-              "line": 406,
+              "line": 436,
               "column": 3
             }
           },
@@ -761,11 +774,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 408,
+              "line": 438,
               "column": 2
             },
             "end": {
-              "line": 424,
+              "line": 454,
               "column": 3
             }
           },
@@ -785,11 +798,35 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 426,
+              "line": 456,
               "column": 2
             },
             "end": {
-              "line": 445,
+              "line": 475,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "e"
+            }
+          ],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "_onFocus",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 477,
+              "column": 2
+            },
+            "end": {
+              "line": 479,
               "column": 3
             }
           },
@@ -818,7 +855,7 @@
           "column": 0
         },
         "end": {
-          "line": 446,
+          "line": 480,
           "column": 1
         }
       },
@@ -827,15 +864,47 @@
       "name": "EtoolsCurrencyAmountInput",
       "attributes": [
         {
+          "name": "value",
+          "description": "",
+          "sourceRange": {
+            "start": {
+              "line": 130,
+              "column": 2
+            },
+            "end": {
+              "line": 132,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "type": "string | null | undefined"
+        },
+        {
+          "name": "readonly",
+          "description": "",
+          "sourceRange": {
+            "start": {
+              "line": 134,
+              "column": 2
+            },
+            "end": {
+              "line": 139,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "type": "boolean | null | undefined"
+        },
+        {
           "name": "label",
           "description": "",
           "sourceRange": {
             "start": {
-              "line": 66,
+              "line": 79,
               "column": 6
             },
             "end": {
-              "line": 66,
+              "line": 79,
               "column": 19
             }
           },
@@ -847,11 +916,11 @@
           "description": "",
           "sourceRange": {
             "start": {
-              "line": 67,
+              "line": 80,
               "column": 6
             },
             "end": {
-              "line": 67,
+              "line": 80,
               "column": 27
             }
           },
@@ -859,54 +928,7 @@
           "type": "boolean | null | undefined"
         },
         {
-          "name": "value",
-          "description": "",
-          "sourceRange": {
-            "start": {
-              "line": 73,
-              "column": 6
-            },
-            "end": {
-              "line": 77,
-              "column": 7
-            }
-          },
-          "metadata": {}
-        },
-        {
           "name": "placeholder",
-          "description": "",
-          "sourceRange": {
-            "start": {
-              "line": 78,
-              "column": 6
-            },
-            "end": {
-              "line": 81,
-              "column": 7
-            }
-          },
-          "metadata": {},
-          "type": "string | null | undefined"
-        },
-        {
-          "name": "readonly",
-          "description": "",
-          "sourceRange": {
-            "start": {
-              "line": 82,
-              "column": 6
-            },
-            "end": {
-              "line": 86,
-              "column": 7
-            }
-          },
-          "metadata": {},
-          "type": "boolean | null | undefined"
-        },
-        {
-          "name": "disabled",
           "description": "",
           "sourceRange": {
             "start": {
@@ -914,7 +936,23 @@
               "column": 6
             },
             "end": {
-              "line": 91,
+              "line": 89,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "string | null | undefined"
+        },
+        {
+          "name": "disabled",
+          "description": "",
+          "sourceRange": {
+            "start": {
+              "line": 94,
+              "column": 6
+            },
+            "end": {
+              "line": 97,
               "column": 7
             }
           },
@@ -926,23 +964,7 @@
           "description": "",
           "sourceRange": {
             "start": {
-              "line": 92,
-              "column": 6
-            },
-            "end": {
-              "line": 96,
-              "column": 7
-            }
-          },
-          "metadata": {},
-          "type": "boolean | null | undefined"
-        },
-        {
-          "name": "auto-validate",
-          "description": "",
-          "sourceRange": {
-            "start": {
-              "line": 97,
+              "line": 98,
               "column": 6
             },
             "end": {
@@ -954,7 +976,7 @@
           "type": "boolean | null | undefined"
         },
         {
-          "name": "invalid",
+          "name": "auto-validate",
           "description": "",
           "sourceRange": {
             "start": {
@@ -962,7 +984,23 @@
               "column": 6
             },
             "end": {
+              "line": 106,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "boolean | null | undefined"
+        },
+        {
+          "name": "invalid",
+          "description": "",
+          "sourceRange": {
+            "start": {
               "line": 107,
+              "column": 6
+            },
+            "end": {
+              "line": 110,
               "column": 7
             }
           },
@@ -974,11 +1012,11 @@
           "description": "",
           "sourceRange": {
             "start": {
-              "line": 108,
+              "line": 111,
               "column": 6
             },
             "end": {
-              "line": 111,
+              "line": 113,
               "column": 7
             }
           },
@@ -990,32 +1028,35 @@
           "description": "",
           "sourceRange": {
             "start": {
-              "line": 112,
+              "line": 114,
               "column": 6
             },
             "end": {
-              "line": 112,
+              "line": 114,
               "column": 22
             }
           },
           "metadata": {},
           "type": "string | null | undefined"
-        }
-      ],
-      "events": [
-        {
-          "type": "CustomEvent",
-          "name": "value-changed",
-          "description": "Fired when the `value` property changes.",
-          "metadata": {}
         },
         {
-          "type": "CustomEvent",
-          "name": "invalid-changed",
-          "description": "Fired when the `invalid` property changes.",
-          "metadata": {}
+          "name": "no-of-decimals",
+          "description": "",
+          "sourceRange": {
+            "start": {
+              "line": 119,
+              "column": 6
+            },
+            "end": {
+              "line": 121,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "number | null | undefined"
         }
       ],
+      "events": [],
       "styling": {
         "cssVariables": [],
         "selectors": []
@@ -1025,106 +1066,6 @@
       "mixins": [
         "EtoolsCurrency"
       ]
-    },
-    {
-      "description": "",
-      "summary": "",
-      "path": "demo/demo-element.js",
-      "properties": [
-        {
-          "name": "inputValue",
-          "type": "string | null | undefined",
-          "description": "",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 30,
-              "column": 6
-            },
-            "end": {
-              "line": 34,
-              "column": 7
-            }
-          },
-          "metadata": {
-            "polymer": {
-              "notify": true,
-              "attributeType": "String"
-            }
-          },
-          "defaultValue": "\"\""
-        }
-      ],
-      "methods": [
-        {
-          "name": "connectedCallback",
-          "description": "",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 38,
-              "column": 2
-            },
-            "end": {
-              "line": 44,
-              "column": 3
-            }
-          },
-          "metadata": {},
-          "params": [],
-          "return": {
-            "type": "void"
-          }
-        }
-      ],
-      "staticMethods": [],
-      "demos": [],
-      "metadata": {},
-      "sourceRange": {
-        "start": {
-          "line": 7,
-          "column": 0
-        },
-        "end": {
-          "line": 45,
-          "column": 1
-        }
-      },
-      "privacy": "public",
-      "superclass": "PolymerElement",
-      "name": "DemoElement",
-      "attributes": [
-        {
-          "name": "input-value",
-          "description": "",
-          "sourceRange": {
-            "start": {
-              "line": 30,
-              "column": 6
-            },
-            "end": {
-              "line": 34,
-              "column": 7
-            }
-          },
-          "metadata": {},
-          "type": "string | null | undefined"
-        }
-      ],
-      "events": [
-        {
-          "type": "CustomEvent",
-          "name": "input-value-changed",
-          "description": "Fired when the `inputValue` property changes.",
-          "metadata": {}
-        }
-      ],
-      "styling": {
-        "cssVariables": [],
-        "selectors": []
-      },
-      "slots": [],
-      "tagname": "demo-element"
     }
   ],
   "mixins": [
@@ -1140,11 +1081,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 11,
+              "line": 12,
               "column": 2
             },
             "end": {
-              "line": 20,
+              "line": 14,
               "column": 3
             }
           },
@@ -1161,11 +1102,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 26,
+              "line": 20,
               "column": 2
             },
             "end": {
-              "line": 42,
+              "line": 22,
               "column": 3
             }
           },
@@ -1188,11 +1129,11 @@
       "metadata": {},
       "sourceRange": {
         "start": {
-          "line": 7,
+          "line": 8,
           "column": 7
         },
         "end": {
-          "line": 43,
+          "line": 23,
           "column": 3
         }
       },
@@ -1205,6 +1146,44 @@
         "selectors": []
       },
       "slots": []
+    }
+  ],
+  "functions": [
+    {
+      "name": "addCurrencyAmountDelimiter",
+      "description": "Format value as currency amount. Delimited used ', '\n   ",
+      "summary": "",
+      "sourceRange": {
+        "file": "mixins/etools-currency-module.js",
+        "start": {
+          "line": 3,
+          "column": 42
+        },
+        "end": {
+          "line": 12,
+          "column": 1
+        }
+      },
+      "privacy": "public",
+      "params": []
+    },
+    {
+      "name": "displayCurrencyAmount",
+      "description": "Format value as currency amount and return it to be displayed\nUse this to display readonly currency amounts on interface\n   ",
+      "summary": "",
+      "sourceRange": {
+        "file": "mixins/etools-currency-module.js",
+        "start": {
+          "line": 18,
+          "column": 37
+        },
+        "end": {
+          "line": 34,
+          "column": 1
+        }
+      },
+      "privacy": "public",
+      "params": []
     }
   ]
 }
