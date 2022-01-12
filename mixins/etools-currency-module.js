@@ -1,6 +1,6 @@
 /**
- * Format value as currency amount. Delimited used ', '
- */
+   * Format value as currency amount. Delimited used ', '
+   */
 export const addCurrencyAmountDelimiter = (value) => {
   if (!value) {
     return '';
@@ -13,9 +13,9 @@ export const addCurrencyAmountDelimiter = (value) => {
 };
 
 /**
- * Format value as currency amount and return it to be displayed
- * Use this to display readonly currency amounts on interface
- */
+   * Format value as currency amount and return it to be displayed
+   * Use this to display readonly currency amounts on interface
+   */
 export const displayCurrencyAmount = (value, placeholder, noOfDecimals) => {
   if (!placeholder) {
     placeholder = '—';

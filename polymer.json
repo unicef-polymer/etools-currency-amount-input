@@ -1,6 +1,7 @@
 {
-  "entrypoint": "etools-currency-amount-input.js",
   "lint": {
-    "rules": ["polymer-2"]
+    "rules": [
+      "polymer-2"
+    ]
   }
 }

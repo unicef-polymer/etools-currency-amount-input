@@ -1,12 +1,12 @@
-import {LitElement, html} from 'lit-element';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import '../etools-currency-amount-input.js';
 
 /**
  * @polymer
  * @customElement
  */
-class DemoElement extends LitElement {
-  render() {
+class DemoElement extends PolymerElement {
+  static get template() {
     // language=HTML
     return html`
       <style>
@@ -15,15 +15,10 @@ class DemoElement extends LitElement {
         }
       </style>
 
-      <etools-currency-amount-input
-        label="Enter value"
-        .value="${this.inputValue}"
-        @value-changed="${(e) => {
-          if (this.inputValue != e.detail.value) {
-            this.inputValue = value;
-          }
-        }}"
-      ></etools-currency-amount-input>
+      <p>The value will change to \`13876533.5678\` in 10 seconds. The field should format the new value.</p>
+
+      <etools-currency-amount-input label="Currency amount example with value provided" value="{{inputValue}}"
+                                    currency="\$"></etools-currency-amount-input>
     `;
   }
 
@@ -34,17 +29,19 @@ class DemoElement extends LitElement {
   static get properties() {
     return {
       inputValue: {
-        type: String
+        type: String,
+        value: '',
+        notify: true
       }
     };
-  }
-  constructor() {
-    super();
-    this.inputValue = 1;
   }
 
   connectedCallback() {
     super.connectedCallback();
+    this.set('inputValue', 123);
+    setTimeout(() => {
+      this.set('inputValue', 13876533.5678);
+    }, 10000);
   }
 }
 
