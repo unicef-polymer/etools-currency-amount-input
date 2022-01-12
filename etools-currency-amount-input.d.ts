@@ -8,11 +8,11 @@
  *   etools-currency-amount-input.js
  */
 
+
 // tslint:disable:variable-name Describing an API that's defined elsewhere.
 // tslint:disable:no-any describes the API as best we are able today
 
 import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
-import {LitElement, html} from 'lit-element';
 
 import {EtoolsCurrency} from './mixins/etools-currency-mixin.js';
 
@@ -37,21 +37,21 @@ import {EtoolsCurrency} from './mixins/etools-currency-mixin.js';
  *
  * `--etools-currency-input` | Mixin applied to currency element | `{}`
  */
-declare class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement | LitElement) {
-  label: string | null | undefined;
-  noLabelFloat: boolean | null | undefined;
-  _internalValue: string | null | undefined;
+declare class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
+  label: string|null|undefined;
+  noLabelFloat: boolean|null|undefined;
+  _internalValue: string|null|undefined;
   value: any;
-  placeholder: string | null | undefined;
-  readonly: boolean | null | undefined;
-  disabled: boolean | null | undefined;
-  required: boolean | null | undefined;
-  autoValidate: boolean | null | undefined;
-  invalid: boolean | null | undefined;
-  errorMessage: string | null | undefined;
-  currency: string | null | undefined;
-  _currentKeyPressed: string | null | undefined;
-  _charsLimit: number | null | undefined;
+  placeholder: string|null|undefined;
+  readonly: boolean|null|undefined;
+  disabled: boolean|null|undefined;
+  required: boolean|null|undefined;
+  autoValidate: boolean|null|undefined;
+  invalid: boolean|null|undefined;
+  errorMessage: string|null|undefined;
+  currency: string|null|undefined;
+  _currentKeyPressed: string|null|undefined;
+  _charsLimit: number|null|undefined;
   noOfDecimals: number;
   _updateStyles(readonly: any, disabled: any, invalid: any): void;
   _computeAutovalidate(autoValidate: any, readonly: any): any;
@@ -82,7 +82,8 @@ declare class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement | 
 }
 
 declare global {
+
   interface HTMLElementTagNameMap {
-    'etools-currency-amount-input': EtoolsCurrencyAmountInput;
+    "etools-currency-amount-input": EtoolsCurrencyAmountInput;
   }
 }

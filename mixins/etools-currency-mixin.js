@@ -6,22 +6,19 @@ import {addCurrencyAmountDelimiter, displayCurrencyAmount} from './etools-curren
  * @polymer
  * @mixinFunction
  */
-export const EtoolsCurrency = dedupingMixin(
-  (superClass) =>
-    class extends superClass {
-      /**
-       * Format value as currency amount. Delimited used ', '
-       */
-      addCurrencyAmountDelimiter(value) {
-        return addCurrencyAmountDelimiter(value);
-      }
+export const EtoolsCurrency = dedupingMixin(superClass => class extends superClass {
+  /**
+   * Format value as currency amount. Delimited used ', '
+   */
+  addCurrencyAmountDelimiter(value) {
+    return addCurrencyAmountDelimiter(value);
+  }
 
-      /**
-       * Format value as currency amount and return it to be displayed
-       * Use this to display readonly currency amounts on interface
-       */
-      displayCurrencyAmount(value, placeholder, noOfDecimals) {
-        return displayCurrencyAmount(value, placeholder, noOfDecimals);
-      }
-    }
-);
+  /**
+   * Format value as currency amount and return it to be displayed
+   * Use this to display readonly currency amounts on interface
+   */
+  displayCurrencyAmount(value, placeholder, noOfDecimals) {
+    return displayCurrencyAmount(value, placeholder, noOfDecimals);
+  }
+});
