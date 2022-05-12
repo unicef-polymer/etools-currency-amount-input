@@ -12,6 +12,8 @@
   "license": "MIT",
   "scripts": {
     "lint": "eslint . --ext js,html",
+    "format:eslint": "eslint --ext .js . --fix --ignore-path .gitignore",
+    "format:prettier": "prettier \"**/*.js\" --write --ignore-path .gitignore",
     "publish": "git push --tags && npm publish",
     "prepublishOnly": "npm run lint"
   },
@@ -24,8 +26,11 @@
     "@polymer/iron-demo-helpers": "^3.0.0",
     "@webcomponents/webcomponentsjs": "^2.5.0",
     "eslint": "^7.1.0",
+    "prettier": "^2.3.2",
     "eslint-config-google": "^0.14.0",
-    "eslint-plugin-html": "^6.0.2",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-html": "^6.2.0",
+    "eslint-plugin-prettier": "^4.0.0",
     "wct-browser-legacy": "^0.0.1-pre.11",
     "prismjs": ">=1.25.0",
     "glob-parent": ">=5.1.2"

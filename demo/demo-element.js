@@ -17,8 +17,11 @@ class DemoElement extends PolymerElement {
 
       <p>The value will change to \`13876533.5678\` in 10 seconds. The field should format the new value.</p>
 
-      <etools-currency-amount-input label="Currency amount example with value provided" value="{{inputValue}}"
-                                    currency="\$"></etools-currency-amount-input>
+      <etools-currency-amount-input
+        label="Currency amount example with value provided"
+        value="{{inputValue}}"
+        currency="$"
+      ></etools-currency-amount-input>
     `;
   }
 

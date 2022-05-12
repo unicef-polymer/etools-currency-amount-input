@@ -1,6 +1,6 @@
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import '@polymer/paper-input/paper-input.js';
-import { EtoolsCurrency } from './mixins/etools-currency-mixin.js';
+import {EtoolsCurrency} from './mixins/etools-currency-mixin.js';
 
 /**
  * `etools-currency-amount-input`
@@ -65,9 +65,7 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
         error-message="[[errorMessage]]"
         no-label-float="[[noLabelFloat]]"
       >
-        <div slot="prefix" class="prefix" hidden$="[[!currency]]">
-          [[currency]]
-        </div>
+        <div slot="prefix" class="prefix" hidden$="[[!currency]]">[[currency]]</div>
       </paper-input>
     `;
   }
@@ -83,57 +81,57 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
       _internalValue: {
         type: String,
         notify: true,
-        observer: '_onInternalValueChange',
+        observer: '_onInternalValueChange'
       },
       value: {
         value: null,
         notify: true,
-        observer: '_onValueChange',
+        observer: '_onValueChange'
       },
       placeholder: {
         type: String,
-        value: '—',
+        value: '—'
       },
       readonly: {
         type: Boolean,
         value: false,
-        reflectToAttribute: true,
+        reflectToAttribute: true
       },
       disabled: {
         type: Boolean,
         value: false,
-        reflectToAttribute: true,
+        reflectToAttribute: true
       },
       required: {
         type: Boolean,
         value: false,
-        reflectToAttribute: true,
+        reflectToAttribute: true
       },
       autoValidate: {
         type: Boolean,
         value: false,
-        reflectToAttribute: true,
+        reflectToAttribute: true
       },
       invalid: {
         type: Boolean,
         value: false,
         notify: true,
-        reflectToAttribute: true,
+        reflectToAttribute: true
       },
       errorMessage: {
         type: String,
-        value: 'This field is required',
+        value: 'This field is required'
       },
       currency: String,
       _currentKeyPressed: String,
       _charsLimit: {
         type: Number,
-        value: 12,
+        value: 12
       },
       noOfDecimals: {
         type: Number,
-        value: 2,
-      },
+        value: 2
+      }
     };
   }
 
@@ -142,11 +140,7 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
   }
 
   _updateStyles(readonly, disabled, invalid) {
-    if (
-      readonly === undefined &&
-      disabled === undefined &&
-      invalid === undefined
-    ) {
+    if (readonly === undefined && disabled === undefined && invalid === undefined) {
       return;
     }
     if (readonly) {
@@ -179,21 +173,15 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
     if (currentValue === null || typeof currentValue === 'undefined') {
       this.set('_internalValue', null);
     }
-    currentValue = parseFloat(
-      this._getValueWithoutFormat(value, this.noOfDecimals, true)
-    ).toFixed(this.noOfDecimals);
+    currentValue = parseFloat(this._getValueWithoutFormat(value, this.noOfDecimals, true)).toFixed(this.noOfDecimals);
     if (isNaN(currentValue)) {
       currentValue = null;
     }
     let internalVal = this._internalValue;
     if (internalVal) {
-      internalVal = parseFloat(
-        this._getValueWithoutFormat(
-          this._internalValue,
-          this.noOfDecimals,
-          true
-        )
-      ).toFixed(this.noOfDecimals);
+      internalVal = parseFloat(this._getValueWithoutFormat(this._internalValue, this.noOfDecimals, true)).toFixed(
+        this.noOfDecimals
+      );
     }
     if (currentValue !== internalVal) {
       this.set('_internalValue', currentValue);
@@ -230,11 +218,7 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
     value = this._getStrValue(value);
     oldValue = this._getStrValue(oldValue);
 
-    if (
-      value.substr(0, 1) === '0' &&
-      value.substr(1, 1) !== '.' &&
-      value.length > 1
-    ) {
+    if (value.substr(0, 1) === '0' && value.substr(1, 1) !== '.' && value.length > 1) {
       this._updateElementInternalValue(oldValue, value);
       return;
     }
@@ -246,10 +230,7 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
 
     // floating point/period can be added just one and only at the end of the string
     const floatingPointPos = value.indexOf('.');
-    if (
-      floatingPointPos > -1 &&
-      floatingPointPos + 1 < value.length - (oldValue.indexOf('.') > -1 ? 4 : 3)
-    ) {
+    if (floatingPointPos > -1 && floatingPointPos + 1 < value.length - (oldValue.indexOf('.') > -1 ? 4 : 3)) {
       // floating point can be added only at the end of the string, starting with the last 2 digits
       this._updateElementInternalValue(value.replace('.', ''), oldValue);
       return;
@@ -260,11 +241,7 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
       preserveFloatingPoint = true;
     }
 
-    if (
-      this._getValueWithoutFormat(value) ===
-        this._getValueWithoutFormat(oldValue) &&
-      !preserveFloatingPoint
-    ) {
+    if (this._getValueWithoutFormat(value) === this._getValueWithoutFormat(oldValue) && !preserveFloatingPoint) {
       // restore damaged internal value
       this._restoreDamagedInternalValue(value, oldValue);
       return;
@@ -273,10 +250,7 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
     const valueWithoutDelimiter = value.replace(/,/g, '');
     const zeroValue = String(parseFloat(0).toFixed(this.noOfDecimals));
     // prevent having invalid numbers like 000,000.00, if number have only 0s, set value to 0.00
-    if (
-      !+valueWithoutDelimiter &&
-      valueWithoutDelimiter.length > zeroValue.length
-    ) {
+    if (!+valueWithoutDelimiter && valueWithoutDelimiter.length > zeroValue.length) {
       this._updateElementInternalValue(zeroValue, value);
       return;
     }
@@ -339,10 +313,7 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
     }
     let iCaretPos = 0;
     if (oField.selectionStart || oField.selectionStart == '0') {
-      iCaretPos =
-        oField.selectionDirection == 'backward'
-          ? oField.selectionStart
-          : oField.selectionEnd;
+      iCaretPos = oField.selectionDirection == 'backward' ? oField.selectionStart : oField.selectionEnd;
     }
     return iCaretPos;
   }
@@ -465,9 +436,7 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
     }
     if (e.which === 190) {
       // do not allow more then one period char ('.')
-      const currentInternalValue = this._internalValue
-        ? this._internalValue.toString()
-        : '';
+      const currentInternalValue = this._internalValue ? this._internalValue.toString() : '';
       const floatingPtsNr = currentInternalValue.split('.').length - 1;
       if (floatingPtsNr === 1) {
         // stop, we already have a period
@@ -503,7 +472,4 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
   }
 }
 
-window.customElements.define(
-  EtoolsCurrencyAmountInput.is,
-  EtoolsCurrencyAmountInput
-);
+window.customElements.define(EtoolsCurrencyAmountInput.is, EtoolsCurrencyAmountInput);
