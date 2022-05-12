@@ -429,7 +429,9 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
   }
 
   _onKeyDown(e) {
-    e.stopImmediatePropagation();
+    if (e.key !== 'Escape') {
+      e.stopImmediatePropagation();
+    }
     let currentKey = null;
     if (e.which === 46) {
       currentKey = 'delete';
