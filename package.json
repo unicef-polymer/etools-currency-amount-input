@@ -14,7 +14,6 @@
     "lint": "eslint . --ext js,html",
     "format:eslint": "eslint --ext .js . --fix --ignore-path .gitignore",
     "format:prettier": "prettier \"**/*.js\" --write --ignore-path .gitignore",
-    "publish": "git push --tags && npm publish",
     "prepublishOnly": "npm run lint"
   },
   "dependencies": {
