@@ -7,7 +7,7 @@ import {addCurrencyAmountDelimiter, displayCurrencyAmount} from './etools-curren
  * @mixinFunction
  */
 export const EtoolsCurrency = dedupingMixin(
-  superClass =>
+  (superClass) =>
     class extends superClass {
       /**
        * Format value as currency amount. Delimited used ', '
