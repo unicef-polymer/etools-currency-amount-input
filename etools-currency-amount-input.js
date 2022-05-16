@@ -44,16 +44,28 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
 
           --paper-input-prefix: {
             margin-right: 5px;
-          };
+          }
         }
       </style>
 
-      <paper-input id="currencyInput" label="[[label]]" value="{{_internalValue}}" allowed-pattern="[0-9\\.\\,]"
-                   placeholder="[[placeholder]]" disabled\$="[[disabled]]" on-keydown="_onKeyDown" on-blur="_onBlur"
-                   readonly\$="[[readonly]]" required\$="[[required]]" invalid="{{invalid}}" on-focus="_onFocus"
-                   auto-validate\$="[[_computeAutovalidate(autoValidate, readonly)]]" error-message="[[errorMessage]]"
-                   no-label-float="[[noLabelFloat]]">
-        <div slot="prefix" class="prefix" hidden\$="[[!currency]]">[[currency]]</div>
+      <paper-input
+        id="currencyInput"
+        label="[[label]]"
+        value="{{_internalValue}}"
+        allowed-pattern="[0-9\\.\\,]"
+        placeholder="[[placeholder]]"
+        disabled$="[[disabled]]"
+        on-keydown="_onKeyDown"
+        on-blur="_onBlur"
+        readonly$="[[readonly]]"
+        required$="[[required]]"
+        invalid="{{invalid}}"
+        on-focus="_onFocus"
+        auto-validate$="[[_computeAutovalidate(autoValidate, readonly)]]"
+        error-message="[[errorMessage]]"
+        no-label-float="[[noLabelFloat]]"
+      >
+        <div slot="prefix" class="prefix" hidden$="[[!currency]]">[[currency]]</div>
       </paper-input>
     `;
   }
@@ -124,9 +136,7 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
   }
 
   static get observers() {
-    return [
-      '_updateStyles(readonly, disabled, invalid)'
-    ];
+    return ['_updateStyles(readonly, disabled, invalid)'];
   }
 
   _updateStyles(readonly, disabled, invalid) {
@@ -149,7 +159,7 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
 
   _getStrValue(value) {
     try {
-      return (value === 0) ? '0' : value.toString();
+      return value === 0 ? '0' : value.toString();
     } catch (error) {
       return '0';
     }
@@ -169,8 +179,9 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
     }
     let internalVal = this._internalValue;
     if (internalVal) {
-      internalVal = parseFloat(this._getValueWithoutFormat(this._internalValue, this.noOfDecimals, true))
-          .toFixed(this.noOfDecimals);
+      internalVal = parseFloat(this._getValueWithoutFormat(this._internalValue, this.noOfDecimals, true)).toFixed(
+        this.noOfDecimals
+      );
     }
     if (currentValue !== internalVal) {
       this.set('_internalValue', currentValue);
@@ -219,7 +230,7 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
 
     // floating point/period can be added just one and only at the end of the string
     const floatingPointPos = value.indexOf('.');
-    if (floatingPointPos > -1 && (floatingPointPos + 1) < value.length - (oldValue.indexOf('.') > -1 ? 4 : 3)) {
+    if (floatingPointPos > -1 && floatingPointPos + 1 < value.length - (oldValue.indexOf('.') > -1 ? 4 : 3)) {
       // floating point can be added only at the end of the string, starting with the last 2 digits
       this._updateElementInternalValue(value.replace('.', ''), oldValue);
       return;
@@ -396,7 +407,7 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
       return true;
     }
     value = value.toString();
-    return (value === '') ? true : false;
+    return value === '' ? true : false;
   }
 
   _getRealNumberValue(value, decimals) {
@@ -418,6 +429,9 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
   }
 
   _onKeyDown(e) {
+    if (e.key !== 'Escape') {
+      e.stopImmediatePropagation();
+    }
     let currentKey = null;
     if (e.which === 46) {
       currentKey = 'delete';
