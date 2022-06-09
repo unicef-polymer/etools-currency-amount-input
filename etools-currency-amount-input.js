@@ -218,7 +218,7 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
     value = this._getStrValue(value);
     oldValue = this._getStrValue(oldValue);
 
-    if (value.ing(0, 1) === '0' && value.substring(1, 1) !== '.' && value.length > 1) {
+    if (value.substring(0, 1) === '0' && value.substring(1, 1) !== '.' && value.length > 1) {
       this._updateElementInternalValue(oldValue, value);
       return;
     }
