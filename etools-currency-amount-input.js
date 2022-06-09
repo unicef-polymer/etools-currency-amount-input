@@ -218,7 +218,7 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
     value = this._getStrValue(value);
     oldValue = this._getStrValue(oldValue);
 
-    if (value.substr(0, 1) === '0' && value.substr(1, 1) !== '.' && value.length > 1) {
+    if (value.ing(0, 1) === '0' && value.substring(1, 1) !== '.' && value.length > 1) {
       this._updateElementInternalValue(oldValue, value);
       return;
     }
@@ -454,7 +454,7 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
   _onBlur(e) {
     if (this._internalValue) {
       // adjust decimals on focus lost
-      if (this._internalValue.substr(-1) === '.') {
+      if (this._internalValue.substring(this._internalValue.length - 1) === '.') {
         this.set('_internalValue', this._internalValue + '00');
       }
       const _floatingPointPos = this._internalValue.indexOf('.');
@@ -466,7 +466,7 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(PolymerElement) {
           this.set('_internalValue', this._internalValue + '0');
         }
       }
-      if (this._internalValue.substr(0, 1) === '.') {
+      if (this._internalValue.substring(0, 1) === '.') {
         this.set('_internalValue', '0' + this._internalValue);
       }
     }
