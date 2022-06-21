@@ -27,7 +27,7 @@ export const displayCurrencyAmount = (value, placeholder, noOfDecimals) => {
     return placeholder;
   }
   const floatValue = parseFloat(value).toFixed(noOfDecimals);
-  if (isNaN(floatValue)) {
+  if (isNaN(+floatValue)) {
     return placeholder;
   }
 
