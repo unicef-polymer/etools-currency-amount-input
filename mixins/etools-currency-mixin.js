@@ -1,2 +1,2 @@
 // !!! for compatibility only. Use correct imports in your apps
-import './src/etools-currency-amount-input';
+export * from '../src/mixins/etools-currency-mixin';

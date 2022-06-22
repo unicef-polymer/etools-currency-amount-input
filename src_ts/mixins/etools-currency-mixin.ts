@@ -1,16 +1,18 @@
 import {addCurrencyAmountDelimiter, displayCurrencyAmount} from './etools-currency-module';
+import {Constructor} from 'lit-element';
 
 /**
  * Currency amount input. US format only.
  * @polymer
  * @mixinFunction
  */
-export const EtoolsCurrency = (superClass) =>
-  class extends superClass {
+
+export function EtoolsCurrency<T extends Constructor<any>>(baseClass: T) {
+  return class extends baseClass {
     /**
      * Format value as currency amount. Delimited used ', '
      */
-    addCurrencyAmountDelimiter(value) {
+    addCurrencyAmountDelimiter(value: any) {
       return addCurrencyAmountDelimiter(value);
     }
 
@@ -18,7 +20,8 @@ export const EtoolsCurrency = (superClass) =>
      * Format value as currency amount and return it to be displayed
      * Use this to display readonly currency amounts on interface
      */
-    displayCurrencyAmount(value, placeholder, noOfDecimals) {
+    displayCurrencyAmount(value: any, placeholder: any, noOfDecimals: any) {
       return displayCurrencyAmount(value, placeholder, noOfDecimals);
     }
   };
+}

@@ -1,14 +1,14 @@
 {
   "description": "A paper-input element that allows only currency amount values. US currency format only.",
   "name": "@unicef-polymer/etools-currency-amount-input",
-  "version": "4.0.0-rc.1",
+  "version": "4.0.0-rc.4",
   "homepage": "https://github.com/unicef-polymer/etools-currency-amount-input",
   "repository": {
     "type": "git",
     "url": "https://github.com/unicef-polymer/etools-currency-amount-input.git"
   },
-  "main": "etools-currency-amount-input.js",
-  "module": "etools-currency-amount-input.js",
+  "main": "src/etools-currency-amount-input.js",
+  "types": "src/etools-currency-amount-input.d.ts",
   "license": "MIT",
   "scripts": {
     "tsToJs": "tsc",
