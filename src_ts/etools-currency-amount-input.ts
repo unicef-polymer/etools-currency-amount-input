@@ -82,7 +82,7 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(LitElement) {
 
   @property({reflect: true, attribute: true}) value: any = null;
 
-  @property() private internalValue!: string | null;
+  @property() private internalValue: string | null = null;
 
   charsLimit = 12;
 
