@@ -105,8 +105,9 @@ class EtoolsCurrencyAmountInput extends EtoolsCurrency(LitElement) {
     }
   }
 
-  validate() {
+  validate(): boolean {
     this.invalid = this.inputElement && !this.inputElement.validate();
+    return !this.invalid;
   }
 
   _getStrValue(value: number) {
