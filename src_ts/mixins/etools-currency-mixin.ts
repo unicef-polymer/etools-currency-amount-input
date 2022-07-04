@@ -12,7 +12,7 @@ export function EtoolsCurrency<T extends Constructor<any>>(baseClass: T) {
     /**
      * Format value as currency amount. Delimited used ', '
      */
-    addCurrencyAmountDelimiter(value: any) {
+    addCurrencyAmountDelimiter(value?: any) {
       return addCurrencyAmountDelimiter(value);
     }
 
@@ -20,7 +20,7 @@ export function EtoolsCurrency<T extends Constructor<any>>(baseClass: T) {
      * Format value as currency amount and return it to be displayed
      * Use this to display readonly currency amounts on interface
      */
-    displayCurrencyAmount(value: any, placeholder: any, noOfDecimals: any) {
+    displayCurrencyAmount(value?: any, placeholder?: any, noOfDecimals?: any) {
       return displayCurrencyAmount(value, placeholder, noOfDecimals);
     }
   };
