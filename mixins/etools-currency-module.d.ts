@@ -1,3 +1,2 @@
-export function addCurrencyAmountDelimiter(value: string): string;
-
-export function displayCurrencyAmount(value: string, placeholder?: string, noOfDecimals?: number): string;
+// !!! for compatibility only. Use correct imports in your apps
+export * from '../src/mixins/etools-currency-module';
