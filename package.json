@@ -14,7 +14,6 @@
     "tsToJs": "tsc",
     "lint": "eslint ./src_ts/**/* --ext ts",
     "format": "eslint --ext .ts ./src_ts/**/* --fix --ignore-path .gitignore",
-    "publishPackage": "npm run tsToJs && npm publish",
     "prepublishOnly": "npm run tsToJs"
   },
   "dependencies": {
