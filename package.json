@@ -1,7 +1,7 @@
 {
   "description": "A paper-input element that allows only currency amount values. US currency format only.",
   "name": "@unicef-polymer/etools-currency-amount-input",
-  "version": "4.0.0",
+  "version": "4.0.2",
   "homepage": "https://github.com/unicef-polymer/etools-currency-amount-input",
   "repository": {
     "type": "git",
@@ -14,7 +14,6 @@
     "tsToJs": "tsc",
     "lint": "eslint ./src_ts/**/* --ext ts",
     "format": "eslint --ext .ts ./src_ts/**/* --fix --ignore-path .gitignore",
-    "publishPackage": "npm run tsToJs && npm publish",
     "prepublishOnly": "npm run tsToJs"
   },
   "dependencies": {
