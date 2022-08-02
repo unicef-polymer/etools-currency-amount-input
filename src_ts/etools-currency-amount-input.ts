@@ -1,6 +1,6 @@
 import {LitElement, html, property} from 'lit-element';
 import '@polymer/paper-input/paper-input.js';
-import {EtoolsCurrency} from './mixins/etools-currency-mixin';
+import {EtoolsCurrency} from './mixins/etools-currency-mixin.js';
 
 /**
  * `etools-currency-amount-input`
@@ -27,7 +27,7 @@ import {EtoolsCurrency} from './mixins/etools-currency-mixin';
  * @lit
  * @appliesMixin EtoolsCurrency
  */
-class EtoolsCurrencyAmountInput extends EtoolsCurrency(LitElement) {
+export class EtoolsCurrencyAmountInput extends EtoolsCurrency(LitElement) {
   render() {
     // language=HTML
     return html`
