@@ -8,4 +8,5 @@ test/
 .eslintingore
 .eslintrc.json
 .prettierrc
-analysis.json 
+analysis.json
+src_ts/
