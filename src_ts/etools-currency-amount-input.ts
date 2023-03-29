@@ -40,7 +40,7 @@ export class EtoolsCurrencyAmountInput extends EtoolsCurrency(LitElement) {
           display: block;
           width: 100%;
           --paper-input-prefix: {
-            margin-right: 5px;
+            margin-inline-end: 5px;
           }
         }
       </style>
